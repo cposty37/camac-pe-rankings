@@ -1,0 +1,2395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global P/E Rankings — Camac Partners</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#06080d;--bg2:#0d1117;--surface:#111827;--surface2:#161f2e;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --text:#cdd5e0;--text2:#5c6f85;--text3:#374151;
+  --emerald:#10b981;--emerald2:#34d399;
+  --blue:#3b82f6;--blue2:#60a5fa;
+  --amber:#f59e0b;--amber2:#fbbf24;
+  --orange:#f97316;--red:#ef4444;--red2:#f87171;
+  --purple:#a78bfa;--cyan:#22d3ee;
+}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+.mono{font-family:'Menlo','Monaco','Consolas','Courier New',monospace}
+.r{text-align:right}.dim{color:var(--text2)}.small{font-size:.68rem}
+.na{color:var(--text3)}
+
+/* === HEADER === */
+.hero{padding:44px 0 32px;text-align:center;border-bottom:1px solid var(--border)}
+.hero h1{font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;color:var(--text)}
+.hero .sub{color:var(--text2);font-size:.88rem;font-weight:400;margin-top:6px}
+.hero .meta{color:var(--text3);font-size:.7rem;font-family:'JetBrains Mono';margin-top:12px;letter-spacing:0.01em}
+.hero .meta span{color:var(--text2)}
+
+/* === LAYOUT === */
+.wrap{max-width:1660px;margin:0 auto;padding:0 32px}
+.section{margin:36px 0}
+.section-head{display:flex;align-items:baseline;gap:12px;margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.section-head h2{font-size:.95rem;font-weight:600;letter-spacing:-0.01em;color:var(--text)}
+.section-head .pill{font-size:.62rem;font-family:'JetBrains Mono';color:var(--text3);letter-spacing:0.04em;text-transform:uppercase}
+
+/* === METRIC CARDS === */
+.metrics{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:24px 0}
+.mc{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:18px 16px}
+.mc .mc-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);font-weight:600;margin-bottom:6px}
+.mc .mc-val{font-size:1.75rem;font-weight:700;font-family:'JetBrains Mono';letter-spacing:-0.03em;line-height:1.2}
+.mc .mc-sub{font-size:.68rem;color:var(--text2);margin-top:2px}
+.mc-val.emerald{color:var(--emerald)}.mc-val.blue{color:var(--blue2)}
+.mc-val.amber{color:var(--amber2)}.mc-val.red{color:var(--red2)}
+
+/* === REGION CARDS === */
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:8px}
+.rcard{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px;text-align:center}
+.rcard:hover{border-color:var(--border2)}
+.rcard-label{font-size:.58rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);font-weight:600}
+.rcard-val{font-size:1.5rem;font-weight:700;font-family:'JetBrains Mono';color:var(--blue2);letter-spacing:-0.02em;margin:4px 0}
+.rcard-x{font-size:.72rem;color:var(--text2);font-weight:400}
+.rcard-ct{font-size:.58rem;color:var(--text3)}
+
+/* === CHARTS === */
+.chart-wrap{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:22px}
+canvas{width:100%!important}
+
+/* === TABLE === */
+.tbl-wrap{background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.filters select,.filters input{background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:6px 12px;font-size:.76rem;font-family:'Inter';outline:none;transition:border-color .15s}
+.filters select:focus,.filters input:focus{border-color:var(--blue)}
+.filters input{width:190px}
+table{width:100%;border-collapse:collapse;font-size:.74rem}
+th{background:var(--bg2);color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:.59rem;padding:10px 10px;position:sticky;top:0;cursor:pointer;user-select:none;white-space:nowrap;border-bottom:1px solid var(--border);transition:color .15s;z-index:2}
+th:hover{color:var(--text2)}
+td{padding:8px 10px;border-bottom:1px solid var(--border);white-space:nowrap}
+tr:hover td{background:rgba(255,255,255,0.025)}
+.cn{font-weight:500}
+
+/* === TIER INDICATORS === */
+.tier-pill{font-size:.64rem;font-weight:500;letter-spacing:.01em}
+.deep_value{color:var(--emerald)}
+.value{color:var(--emerald2)}
+.fair_value{color:var(--amber2)}
+.expensive{color:var(--orange)}
+.very_expensive{color:var(--red2)}
+.no_data{color:var(--text3)}
+.econ_high_potential{color:var(--emerald)}
+.econ_moderate_potential{color:var(--blue2)}
+.econ_developing{color:var(--amber2)}
+.econ_pre-emerging{color:var(--orange)}
+
+/* === MSCI LABELS === */
+.badge{font-size:.6rem;font-weight:500;letter-spacing:.02em}
+.msci-developed{color:var(--blue2)}
+.msci-emerging{color:var(--purple)}
+.msci-frontier{color:var(--cyan)}
+.msci-standalone{color:var(--amber2)}
+.msci-non-msci{color:var(--orange)}
+
+/* === ACCESS TIER BADGES === */
+.access-open{color:var(--emerald)}
+.access-frontier{color:var(--cyan)}
+.access-accessible{color:var(--blue2)}
+.access-controlled{color:var(--amber2)}
+.access-inaccessible{color:var(--red2)}
+.access-restricted{color:var(--text3)}
+
+/* === BEST INVESTABLE TABLE === */
+.best-table{background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.peg-good{color:var(--emerald)}
+.peg-ok{color:var(--amber2)}
+
+.cvs-cell{font-weight:600}
+.score-cell{font-weight:600;color:var(--blue2)}
+
+/* === LEGEND === */
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:.66rem;color:var(--text2)}
+.legend-dot{width:7px;height:7px;border-radius:2px}
+
+/* === PROVENANCE === */
+.prov{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:28px;margin-top:36px}
+.prov h2{font-size:.9rem;font-weight:600;color:var(--text2);margin-bottom:14px}
+.prov p,.prov li{color:var(--text2);font-size:.76rem;line-height:1.8}
+.prov ul{padding-left:18px}.prov li{margin:4px 0}
+.prov strong{color:var(--text)}
+
+/* === METHODOLOGY === */
+.meth-section{margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.meth-section:last-child{border-bottom:none;margin-bottom:0}
+.meth-section h3{font-size:.8rem;font-weight:600;color:var(--text);margin-bottom:8px;letter-spacing:-.01em}
+.meth-section p{color:var(--text2);font-size:.74rem;line-height:1.75;margin-bottom:6px}
+.meth-section ul{padding-left:16px;margin:4px 0}
+.meth-section li{color:var(--text2);font-size:.74rem;line-height:1.75;margin:3px 0}
+.meth-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:.72rem}
+.meth-table th{background:var(--bg2);color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:.58rem;padding:7px 10px;border-bottom:1px solid var(--border);text-align:left}
+.meth-table td{padding:7px 10px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.65}
+.meth-table td:first-child{white-space:nowrap;font-weight:500;color:var(--text)}
+.meth-table td:nth-child(2){white-space:nowrap;text-align:center;font-family:'Menlo','Monaco','Consolas',monospace;color:var(--blue2);font-weight:600}
+.meth-table tr:last-child td{border-bottom:none}
+th[data-tip]{cursor:help;border-bottom:1px dashed rgba(255,255,255,0.18)}
+
+.noexch{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:22px;margin-top:14px}
+.noexch h3{font-size:.8rem;font-weight:600;color:var(--text2);margin-bottom:10px}
+.noexch p{color:var(--text3);font-size:.7rem;line-height:2}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:1100px){.two-col{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="hero">
+<div class="wrap">
+<h1>Global Country P/E Rankings</h1>
+<div class="sub">Composite Value Score · Every Investable Market on Earth</div>
+<div class="meta">March 13, 2026 · 18:55 ET · <span>94 markets scored</span> · Source: Deep Research + MSCI + WFE + AFC + World Bank</div>
+</div>
+</div>
+
+<div class="wrap">
+<div class="metrics">
+<div class="mc b"><div class="mc-label">Markets Scored</div><div class="mc-val blue">94</div><div class="mc-sub">with P/E data</div></div>
+<div class="mc a"><div class="mc-label">Global Median P/E</div><div class="mc-val amber">12.5x</div><div class="mc-sub">cross-sectional</div></div>
+<div class="mc g"><div class="mc-label">Cheapest Market</div><div class="mc-val emerald">Lebanon</div><div class="mc-sub">4.1x trailing P/E</div></div>
+<div class="mc r2"><div class="mc-label">Most Expensive</div><div class="mc-val red">Malawi</div><div class="mc-sub">42.6x trailing P/E</div></div>
+<div class="mc g"><div class="mc-label">Deep Value</div><div class="mc-val emerald">12</div><div class="mc-sub">CVS > +1.0σ</div></div>
+<div class="mc b"><div class="mc-label">Econ Profiles</div><div class="mc-val blue">58</div><div class="mc-sub">World Bank data</div></div>
+</div>
+
+<div class="section">
+<div class="section-head"><h2>Average P/E by Region</h2><span class="pill">CROSS-SECTIONAL</span></div>
+<div class="rgrid"><div class="rcard"><div class="rcard-label">Africa</div><div class="rcard-val">11.1<span class="rcard-x">x</span></div><div class="rcard-ct">16 markets</div></div>
+<div class="rcard"><div class="rcard-label">Asia-Pacific</div><div class="rcard-val">15.8<span class="rcard-x">x</span></div><div class="rcard-ct">21 markets</div></div>
+<div class="rcard"><div class="rcard-label">Central Asia</div><div class="rcard-val">4.8<span class="rcard-x">x</span></div><div class="rcard-ct">2 markets</div></div>
+<div class="rcard"><div class="rcard-label">Europe</div><div class="rcard-val">14.7<span class="rcard-x">x</span></div><div class="rcard-ct">31 markets</div></div>
+<div class="rcard"><div class="rcard-label">Latin America</div><div class="rcard-val">13.4<span class="rcard-x">x</span></div><div class="rcard-ct">11 markets</div></div>
+<div class="rcard"><div class="rcard-label">Middle East</div><div class="rcard-val">11.2<span class="rcard-x">x</span></div><div class="rcard-ct">11 markets</div></div>
+<div class="rcard"><div class="rcard-label">North America</div><div class="rcard-val">24.0<span class="rcard-x">x</span></div><div class="rcard-ct">2 markets</div></div>
+</div>
+</div>
+
+<div class="section">
+<div class="section-head"><h2>Top 30 — Composite Value Score</h2><span class="pill">CHEAPEST MARKETS</span></div>
+<div class="chart-wrap"><canvas id="barChart"></canvas></div>
+</div>
+
+<div class="section">
+<div class="section-head"><h2>Valuation Landscape</h2><span class="pill">P/E vs MARKET CAP</span></div>
+<div class="chart-wrap"><canvas id="scatterChart"></canvas></div>
+</div>
+
+<div class="section">
+<div class="section-head"><h2>Complete P/E Rankings</h2><span class="pill">94 MARKETS</span></div>
+<div class="legend">
+<div class="legend-item"><div class="legend-dot" style="background:var(--emerald)"></div>Deep Value (z>1.0)</div>
+<div class="legend-item"><div class="legend-dot" style="background:var(--emerald2)"></div>Value (0.3–1.0)</div>
+<div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div>Fair Value</div>
+<div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div>Expensive</div>
+<div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Very Expensive</div>
+</div>
+<div class="filters">
+<select id="fTier" onchange="ft()"><option value="">All Tiers</option><option>Deep Value</option><option>Value</option><option>Fair Value</option><option>Expensive</option><option>Very Expensive</option></select>
+<select id="fMsci" onchange="ft()"><option value="">All Classifications</option><option>Developed</option><option>Emerging</option><option>Frontier</option><option>Standalone</option><option>Non-MSCI</option></select>
+<select id="fRegion" onchange="ft()"><option value="">All Regions</option><option>North America</option><option>Europe</option><option>Asia-Pacific</option><option>Latin America</option><option>Middle East</option><option>Africa</option><option>Central Asia</option></select>
+<select id="fAccess" onchange="ft()"><option value="">All Access</option><option>Open</option><option>Frontier</option><option>Accessible</option><option>Controlled</option><option>Inaccessible</option><option>Restricted</option></select>
+<input type="text" id="fSearch" placeholder="Search country…" oninput="ft()">
+</div>
+<div class="tbl-wrap">
+<table id="peTable">
+<thead><tr>
+<th onclick="ss(0,'n')" title="CVS rank, cheapest first. Countries with no P/E data appear at the bottom.">Rank</th>
+<th onclick="ss(1,'s')">Country</th>
+<th onclick="ss(2,'s')">Region</th>
+<th onclick="ss(3,'s')" title="MSCI market classification. DM = Developed (highest access, deepest liquidity). EM = Emerging. FM = Frontier. SA = Standalone. Non-MSCI = unclassified. Determines institutional accessibility and benchmark inclusion.">MSCI</th>
+<th onclick="ss(4,'n')" title="Trailing 12-month P/E for the country benchmark index. Lower = cheaper. Confidence varies by source — see Source column. Not adjusted for sector composition or accounting standards.">P/E</th>
+<th onclick="ss(5,'n')" title="Earnings Yield = 1 ÷ P/E. The equity-market equivalent of a bond yield — aggregate profits earned per dollar invested. 8x P/E → 12.5% EY. Higher = cheaper. Raw input to CVS.">EY%</th>
+<th onclick="ss(6,'n')" title="Composite Value Score: how cheap this market is relative to all others, in standard deviations of earnings yield. +1.0 = statistically cheap. 0 = average. −1.0 = expensive. Does not adjust for political risk, liquidity, or data quality.">CVS</th>
+<th onclick="ss(7,'s')" title="Deep Value (CVS > +1.0) · Value (+0.3 to +1.0) · Fair Value (±0.3) · Expensive (−0.3 to −1.0) · Very Expensive (< −1.0)">Tier</th>
+<th onclick="ss(8,'n')" title="Real GDP growth — World Bank (typically 1–2 year lag). Green ≥5% · Blue 2–5% · Amber 0–2% · Red negative. Hover cell for data year.">GDP↑</th>
+<th onclick="ss(9,'n')" title="CPI inflation — World Bank. Green ≤3% · Amber ≤8% · Orange ≤20% · Red >20%. High inflation distorts reported P/E and erodes real returns. Hover cell for data year.">Infl%</th>
+<th onclick="ss(10,'s')" title="Primary stock exchange(s) for this market.">Exchange</th>
+<th onclick="ss(11,'s')" title="Investability tier. Open = MSCI DM/EM · Frontier = MSCI Frontier · Accessible = non-MSCI with ETF · Restricted = no ETF, needs local broker · Controlled = capital controls · Inaccessible = sanctions or conflict. See Methodology below.">Access</th>
+<th onclick="ss(12,'n')" title="Trailing dividend yield of the primary country ETF (yfinance). Income return only — excludes price appreciation. '—' = no ETF available.">Div Yield</th>
+<th onclick="ss(13,'n')" title="1-year total return of the primary country ETF in USD (yfinance). ETF return ≠ local index return due to currency, fees, and tracking differences.">1yr ETF</th>
+<th title="Primary country ETF ticker(s). '—' = no accessible vehicle for this market.">ETF</th>
+<th title="Data confidence tier. MSCI TTM = highest · WFE = high · Fund portfolio = medium · Local est. or SimplyWall.st = lower. See Methodology below.">Source</th>
+</tr></thead>
+<tbody><tr data-tier="Deep Value" data-msci="Standalone" data-region="Middle East" data-access="Controlled" data-name="lebanon">
+<td>1</td><td class="cn">Lebanon</td><td>Middle East</td>
+<td><span class="badge msci-standalone">Standalone</span></td>
+<td class="mono r">4.1x</td><td class="mono r">24.4%</td>
+<td class="mono r cvs-cell" data-cvs="3.426">+3.43</td>
+<td><span class="tier-pill deep_value">Deep Value</span></td>
+<td class="mono r" style="color:var(--red2)" title="2023">-0.8%</td><td class="mono r" style="color:var(--red2)" title="2024">45.2%</td><td class="dim">Beirut SE</td>
+<td><span class="badge access-controlled">Controlled</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">Local Index TTM</td></tr>
+<tr data-tier="Deep Value" data-msci="Standalone" data-region="Europe" data-access="Inaccessible" data-name="russia">
+<td>2</td><td class="cn">Russia</td><td>Europe</td>
+<td><span class="badge msci-standalone">Standalone</span></td>
+<td class="mono r">4.2x</td><td class="mono r">23.8%</td>
+<td class="mono r cvs-cell" data-cvs="3.297">+3.30</td>
+<td><span class="tier-pill deep_value">Deep Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">4.3%</td><td class="mono r" style="color:var(--orange)" title="2024">8.4%</td><td class="dim">Moscow Exchange</td>
+<td><span class="badge access-inaccessible">Inaccessible</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">MOEX Local (TTM)</td></tr>
+<tr data-tier="Deep Value" data-msci="Frontier" data-region="Central Asia" data-access="Frontier" data-name="kazakhstan">
+<td>3</td><td class="cn">Kazakhstan</td><td>Central Asia</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">4.3x</td><td class="mono r">23.3%</td>
+<td class="mono r cvs-cell" data-cvs="3.175">+3.17</td>
+<td><span class="tier-pill deep_value">Deep Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">5.0%</td><td class="mono r" style="color:var(--orange)" title="2024">8.8%</td><td class="dim">Kazakhstan SE (KASE)</td>
+<td><span class="badge access-frontier">Frontier</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">KASPI (GDR)</td>
+<td class="dim small">Fund Portfolio (Halyk Bank)</td></tr>
+<tr data-tier="Deep Value" data-msci="Non-MSCI" data-region="Central Asia" data-access="Accessible" data-name="uzbekistan">
+<td>4</td><td class="cn">Uzbekistan</td><td>Central Asia</td>
+<td><span class="badge msci-non-msci">Non-MSCI</span></td>
+<td class="mono r">5.3x</td><td class="mono r">19.0%</td>
+<td class="mono r cvs-cell" data-cvs="2.23">+2.23</td>
+<td><span class="tier-pill deep_value">Deep Value</span></td>
+<td class="mono r" style="color:var(--emerald)" title="2024">6.5%</td><td class="mono r" style="color:var(--orange)" title="2024">9.6%</td><td class="dim">Tashkent Stock Exch</td>
+<td><span class="badge access-accessible">Accessible</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">AFC Uzbekistan</td>
+<td class="dim small">AFC Portfolio Harmonic</td></tr>
+<tr data-tier="Deep Value" data-msci="Frontier" data-region="Africa" data-access="Frontier" data-name="kenya">
+<td>5</td><td class="cn">Kenya</td><td>Africa</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">5.3x</td><td class="mono r">18.9%</td>
+<td class="mono r cvs-cell" data-cvs="2.199">+2.20</td>
+<td><span class="tier-pill deep_value">Deep Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">4.7%</td><td class="mono r" style="color:var(--amber2)" title="2024">4.5%</td><td class="dim">Nairobi Securities Exch</td>
+<td><span class="badge access-frontier">Frontier</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">East Capital (2026 Est.)</td></tr>
+<tr data-tier="Deep Value" data-msci="Standalone" data-region="Africa" data-access="Accessible" data-name="nigeria">
+<td>6</td><td class="cn">Nigeria</td><td>Africa</td>
+<td><span class="badge msci-standalone">Standalone</span></td>
+<td class="mono r">5.5x</td><td class="mono r">18.2%</td>
+<td class="mono r cvs-cell" data-cvs="2.046">+2.05</td>
+<td><span class="tier-pill deep_value">Deep Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">4.1%</td><td class="mono r" style="color:var(--red2)" title="2024">33.2%</td><td class="dim">Nigerian Exchange (NGX)</td>
+<td><span class="badge access-accessible">Accessible</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">NGE</td>
+<td class="dim small">Fund Portfolio (Zenith)</td></tr>
+<tr data-tier="Deep Value" data-msci="Non-MSCI" data-region="Africa" data-access="Restricted" data-name="zambia">
+<td>7</td><td class="cn">Zambia</td><td>Africa</td>
+<td><span class="badge msci-non-msci">Non-MSCI</span></td>
+<td class="mono r">5.8x</td><td class="mono r">17.2%</td>
+<td class="mono r cvs-cell" data-cvs="1.837">+1.84</td>
+<td><span class="tier-pill deep_value">Deep Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">3.8%</td><td class="mono r" style="color:var(--orange)" title="2024">15.0%</td><td class="dim">Lusaka Securities Exch</td>
+<td><span class="badge access-restricted">Restricted</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">WFE Statistics Team</td></tr>
+<tr data-tier="Deep Value" data-msci="Frontier" data-region="Asia-Pacific" data-access="Frontier" data-name="pakistan">
+<td>8</td><td class="cn">Pakistan</td><td>Asia-Pacific</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">6.0x</td><td class="mono r">16.7%</td>
+<td class="mono r cvs-cell" data-cvs="1.71">+1.71</td>
+<td><span class="tier-pill deep_value">Deep Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">3.0%</td><td class="mono r" style="color:var(--orange)" title="2024">12.6%</td><td class="dim">Pakistan Stock Exchange</td>
+<td><span class="badge access-frontier">Frontier</span></td><td class="mono r" style="color:var(--emerald)">5.8%</td><td class="na">—</td>
+<td class="mono dim">PAK</td>
+<td class="dim small">Fund Est. (TTM 2025)</td></tr>
+<tr data-tier="Deep Value" data-msci="Non-MSCI" data-region="Africa" data-access="Restricted" data-name="ghana">
+<td>9</td><td class="cn">Ghana</td><td>Africa</td>
+<td><span class="badge msci-non-msci">Non-MSCI</span></td>
+<td class="mono r">6.2x</td><td class="mono r">16.1%</td>
+<td class="mono r cvs-cell" data-cvs="1.59">+1.59</td>
+<td><span class="tier-pill deep_value">Deep Value</span></td>
+<td class="mono r" style="color:var(--emerald)" title="2024">5.6%</td><td class="mono r" style="color:var(--red2)" title="2024">22.8%</td><td class="dim">Ghana Stock Exchange</td>
+<td><span class="badge access-restricted">Restricted</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">Fund Portfolio (2025)</td></tr>
+<tr data-tier="Deep Value" data-msci="Non-MSCI" data-region="Middle East" data-access="Accessible" data-name="iraq">
+<td>10</td><td class="cn">Iraq</td><td>Middle East</td>
+<td><span class="badge msci-non-msci">Non-MSCI</span></td>
+<td class="mono r">6.5x</td><td class="mono r">15.4%</td>
+<td class="mono r cvs-cell" data-cvs="1.424">+1.42</td>
+<td><span class="tier-pill deep_value">Deep Value</span></td>
+<td class="mono r" style="color:var(--red2)" title="2024">-1.5%</td><td class="mono r" style="color:var(--emerald)" title="2024">-12.3%</td><td class="dim">Iraq Stock Exchange</td>
+<td><span class="badge access-accessible">Accessible</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">AFC Iraq</td>
+<td class="dim small">Rabee Sec. US Index</td></tr>
+<tr data-tier="Deep Value" data-msci="Non-MSCI" data-region="Africa" data-access="Restricted" data-name="namibia">
+<td>11</td><td class="cn">Namibia</td><td>Africa</td>
+<td><span class="badge msci-non-msci">Non-MSCI</span></td>
+<td class="mono r">6.6x</td><td class="mono r">15.2%</td>
+<td class="mono r cvs-cell" data-cvs="1.372">+1.37</td>
+<td><span class="tier-pill deep_value">Deep Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">3.7%</td><td class="mono r" style="color:var(--amber2)" title="2024">4.2%</td><td class="dim">Namibian Stock Exchange (NSX)</td>
+<td><span class="badge access-restricted">Restricted</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">SimplyWall.st aggregated est. — NSX 3-yr avg PE ~6.6x (2025); retail analytics platform, not primary source — verify vs. NSX annual statistics before citing</td></tr>
+<tr data-tier="Deep Value" data-msci="Non-MSCI" data-region="Africa" data-access="Restricted" data-name="tanzania">
+<td>12</td><td class="cn">Tanzania</td><td>Africa</td>
+<td><span class="badge msci-non-msci">Non-MSCI</span></td>
+<td class="mono r">7.4x</td><td class="mono r">13.5%</td>
+<td class="mono r cvs-cell" data-cvs="1.008">+1.01</td>
+<td><span class="tier-pill deep_value">Deep Value</span></td>
+<td class="mono r" style="color:var(--emerald)" title="2024">5.5%</td><td class="mono r" style="color:var(--amber2)" title="2024">3.1%</td><td class="dim">Dar Es Salaam SE</td>
+<td><span class="badge access-restricted">Restricted</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">WFE Statistics Team</td></tr>
+<tr data-tier="Value" data-msci="Frontier" data-region="Asia-Pacific" data-access="Frontier" data-name="sri lanka">
+<td>13</td><td class="cn">Sri Lanka</td><td>Asia-Pacific</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">7.5x</td><td class="mono r">13.3%</td>
+<td class="mono r cvs-cell" data-cvs="0.968">+0.97</td>
+<td><span class="tier-pill value">Value</span></td>
+<td class="mono r" style="color:var(--emerald)" title="2024">5.0%</td><td class="mono r" style="color:var(--emerald)" title="2024">-0.4%</td><td class="dim">Colombo Stock Exchange</td>
+<td><span class="badge access-frontier">Frontier</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">Fund Portfolio (WindForce)</td></tr>
+<tr data-tier="Value" data-msci="Emerging" data-region="Latin America" data-access="Open" data-name="colombia">
+<td>14</td><td class="cn">Colombia</td><td>Latin America</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">7.7x</td><td class="mono r">13.0%</td>
+<td class="mono r cvs-cell" data-cvs="0.888">+0.89</td>
+<td><span class="tier-pill value">Value</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">1.6%</td><td class="mono r" style="color:var(--amber2)" title="2024">6.6%</td><td class="dim">Bolsa de Valores de Colombia</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">6.4%</td><td class="mono r" style="color:var(--emerald)">+52.6%</td>
+<td class="mono dim">GXG, COLO</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Value" data-msci="Standalone" data-region="Africa" data-access="Accessible" data-name="egypt">
+<td>15</td><td class="cn">Egypt</td><td>Africa</td>
+<td><span class="badge msci-standalone">Standalone</span></td>
+<td class="mono r">7.8x</td><td class="mono r">12.8%</td>
+<td class="mono r cvs-cell" data-cvs="0.855">+0.85</td>
+<td><span class="tier-pill value">Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">2.4%</td><td class="mono r" style="color:var(--red2)" title="2024">28.3%</td><td class="dim">Egyptian Exchange (EGX)</td>
+<td><span class="badge access-accessible">Accessible</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">EGPT</td>
+<td class="dim small">EGX Local Index TTM</td></tr>
+<tr data-tier="Value" data-msci="Frontier" data-region="Asia-Pacific" data-access="Frontier" data-name="bangladesh">
+<td>16</td><td class="cn">Bangladesh</td><td>Asia-Pacific</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">8.1x</td><td class="mono r">12.3%</td>
+<td class="mono r cvs-cell" data-cvs="0.75">+0.75</td>
+<td><span class="tier-pill value">Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">4.2%</td><td class="mono r" style="color:var(--orange)" title="2024">10.5%</td><td class="dim">Dhaka Stock Exchange</td>
+<td><span class="badge access-frontier">Frontier</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">Fund Portfolio (Square Ph.)</td></tr>
+<tr data-tier="Value" data-msci="Standalone" data-region="Middle East" data-access="Restricted" data-name="palestine">
+<td>17</td><td class="cn">Palestine</td><td>Middle East</td>
+<td><span class="badge msci-standalone">Standalone</span></td>
+<td class="mono r">8.2x</td><td class="mono r">12.2%</td>
+<td class="mono r cvs-cell" data-cvs="0.717">+0.72</td>
+<td><span class="tier-pill value">Value</span></td>
+<td class="mono r" style="color:var(--red2)" title="2024">-26.6%</td><td class="mono r" style="color:var(--red2)" title="2024">53.7%</td><td class="dim">Palestine Exchange</td>
+<td><span class="badge access-restricted">Restricted</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">WFE Statistics Team</td></tr>
+<tr data-tier="Value" data-msci="Frontier" data-region="Africa" data-access="Frontier" data-name="tunisia">
+<td>18</td><td class="cn">Tunisia</td><td>Africa</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">8.4x</td><td class="mono r">11.9%</td>
+<td class="mono r cvs-cell" data-cvs="0.65">+0.65</td>
+<td><span class="tier-pill value">Value</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">1.6%</td><td class="mono r" style="color:var(--amber2)" title="2024">7.2%</td><td class="dim">Tunis Stock Exchange</td>
+<td><span class="badge access-frontier">Frontier</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">WFE Statistics Team</td></tr>
+<tr data-tier="Value" data-msci="Non-MSCI" data-region="Asia-Pacific" data-access="Restricted" data-name="laos">
+<td>19</td><td class="cn">Laos</td><td>Asia-Pacific</td>
+<td><span class="badge msci-non-msci">Non-MSCI</span></td>
+<td class="mono r">8.5x</td><td class="mono r">11.8%</td>
+<td class="mono r cvs-cell" data-cvs="0.619">+0.62</td>
+<td><span class="tier-pill value">Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">4.1%</td><td class="mono r" style="color:var(--red2)" title="2024">23.1%</td><td class="dim">Laos Securities Exch</td>
+<td><span class="badge access-restricted">Restricted</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">Local Index TTM</td></tr>
+<tr data-tier="Value" data-msci="Frontier" data-region="Middle East" data-access="Frontier" data-name="jordan">
+<td>20</td><td class="cn">Jordan</td><td>Middle East</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">8.8x</td><td class="mono r">11.4%</td>
+<td class="mono r cvs-cell" data-cvs="0.53">+0.53</td>
+<td><span class="tier-pill value">Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">2.5%</td><td class="mono r" style="color:var(--emerald)" title="2024">1.6%</td><td class="dim">Amman Stock Exchange</td>
+<td><span class="badge access-frontier">Frontier</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Value" data-msci="Non-MSCI" data-region="Africa" data-access="Restricted" data-name="rwanda">
+<td>21</td><td class="cn">Rwanda</td><td>Africa</td>
+<td><span class="badge msci-non-msci">Non-MSCI</span></td>
+<td class="mono r">9.1x</td><td class="mono r">11.0%</td>
+<td class="mono r cvs-cell" data-cvs="0.448">+0.45</td>
+<td><span class="tier-pill value">Value</span></td>
+<td class="mono r" style="color:var(--emerald)" title="2024">8.9%</td><td class="mono r" style="color:var(--emerald)" title="2024">1.8%</td><td class="dim">Rwanda Stock Exchange</td>
+<td><span class="badge access-restricted">Restricted</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">WFE Statistics Team</td></tr>
+<tr data-tier="Value" data-msci="Frontier" data-region="Europe" data-access="Frontier" data-name="romania">
+<td>22</td><td class="cn">Romania</td><td>Europe</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">9.2x</td><td class="mono r">10.9%</td>
+<td class="mono r cvs-cell" data-cvs="0.421">+0.42</td>
+<td><span class="tier-pill value">Value</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">0.9%</td><td class="mono r" style="color:var(--amber2)" title="2024">5.7%</td><td class="dim">Bucharest SE</td>
+<td><span class="badge access-frontier">Frontier</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Value" data-msci="Frontier" data-region="Europe" data-access="Frontier" data-name="serbia">
+<td>23</td><td class="cn">Serbia</td><td>Europe</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">9.2x</td><td class="mono r">10.9%</td>
+<td class="mono r cvs-cell" data-cvs="0.421">+0.42</td>
+<td><span class="tier-pill value">Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">3.9%</td><td class="mono r" style="color:var(--amber2)" title="2024">4.7%</td><td class="dim">Belgrade SE</td>
+<td><span class="badge access-frontier">Frontier</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Value" data-msci="Frontier" data-region="Middle East" data-access="Frontier" data-name="bahrain">
+<td>24</td><td class="cn">Bahrain</td><td>Middle East</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">9.5x</td><td class="mono r">10.5%</td>
+<td class="mono r cvs-cell" data-cvs="0.345">+0.34</td>
+<td><span class="tier-pill value">Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">2.6%</td><td class="mono r" style="color:var(--emerald)" title="2024">0.9%</td><td class="dim">Bahrain Bourse</td>
+<td><span class="badge access-frontier">Frontier</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">WFE Statistics Team</td></tr>
+<tr data-tier="Value" data-msci="Non-MSCI" data-region="Asia-Pacific" data-access="Restricted" data-name="mongolia">
+<td>25</td><td class="cn">Mongolia</td><td>Asia-Pacific</td>
+<td><span class="badge msci-non-msci">Non-MSCI</span></td>
+<td class="mono r">9.5x</td><td class="mono r">10.5%</td>
+<td class="mono r cvs-cell" data-cvs="0.345">+0.34</td>
+<td><span class="tier-pill value">Value</span></td>
+<td class="mono r" style="color:var(--emerald)" title="2024">5.1%</td><td class="mono r" style="color:var(--amber2)" title="2024">6.2%</td><td class="dim">Mongolian Stock Exchange</td>
+<td><span class="badge access-restricted">Restricted</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">WFE Statistics Team</td></tr>
+<tr data-tier="Value" data-msci="Frontier" data-region="Asia-Pacific" data-access="Frontier" data-name="vietnam">
+<td>26</td><td class="cn">Vietnam</td><td>Asia-Pacific</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">9.7x</td><td class="mono r">10.4%</td>
+<td class="mono r cvs-cell" data-cvs="0.308">+0.31</td>
+<td><span class="tier-pill value">Value</span></td>
+<td class="mono r" style="color:var(--emerald)" title="2024">7.1%</td><td class="mono r" style="color:var(--amber2)" title="2024">3.6%</td><td class="dim">Hochiminh Stock Exchange</td>
+<td><span class="badge access-frontier">Frontier</span></td><td class="mono r" style="color:var(--emerald)">0.2%</td><td class="mono r" style="color:var(--emerald)">+34.4%</td>
+<td class="mono dim">VNM</td>
+<td class="dim small">AFC Portfolio (Weighted)</td></tr>
+<tr data-tier="Fair Value" data-msci="Emerging" data-region="Asia-Pacific" data-access="Open" data-name="china">
+<td>27</td><td class="cn">China</td><td>Asia-Pacific</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">10.2x</td><td class="mono r">9.8%</td>
+<td class="mono r cvs-cell" data-cvs="0.19">+0.19</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">5.0%</td><td class="mono r" style="color:var(--emerald)" title="2024">0.2%</td><td class="dim">Shanghai / Shenzhen</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">2.1%</td><td class="mono r" style="color:var(--emerald2)">+6.0%</td>
+<td class="mono dim">GXC, MCHI, ASHR</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Fair Value" data-msci="Frontier" data-region="Africa" data-access="Frontier" data-name="botswana">
+<td>28</td><td class="cn">Botswana</td><td>Africa</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">10.2x</td><td class="mono r">9.8%</td>
+<td class="mono r cvs-cell" data-cvs="0.183">+0.18</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--red2)" title="2024">-3.0%</td><td class="mono r" style="color:var(--emerald)" title="2024">2.8%</td><td class="dim">Botswana Stock Exch</td>
+<td><span class="badge access-frontier">Frontier</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">WFE Statistics Team</td></tr>
+<tr data-tier="Fair Value" data-msci="Frontier" data-region="Europe" data-access="Frontier" data-name="slovenia">
+<td>29</td><td class="cn">Slovenia</td><td>Europe</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">10.4x</td><td class="mono r">9.6%</td>
+<td class="mono r cvs-cell" data-cvs="0.143">+0.14</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">1.7%</td><td class="mono r" style="color:var(--emerald)" title="2024">2.0%</td><td class="dim">Ljubljana SE</td>
+<td><span class="badge access-frontier">Frontier</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">Fund Portfolio (NLB)</td></tr>
+<tr data-tier="Fair Value" data-msci="Non-MSCI" data-region="Asia-Pacific" data-access="Controlled" data-name="myanmar">
+<td>30</td><td class="cn">Myanmar</td><td>Asia-Pacific</td>
+<td><span class="badge msci-non-msci">Non-MSCI</span></td>
+<td class="mono r">10.4x</td><td class="mono r">9.6%</td>
+<td class="mono r cvs-cell" data-cvs="0.143">+0.14</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--red2)" title="2024">-1.0%</td><td class="mono r" style="color:var(--orange)" title="2019">8.8%</td><td class="dim">Yangon Stock Exch</td>
+<td><span class="badge access-controlled">Controlled</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">Local TTM (Est.)</td></tr>
+<tr data-tier="Fair Value" data-msci="Emerging" data-region="Europe" data-access="Open" data-name="greece">
+<td>31</td><td class="cn">Greece</td><td>Europe</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">10.5x</td><td class="mono r">9.5%</td>
+<td class="mono r cvs-cell" data-cvs="0.121">+0.12</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">2.1%</td><td class="mono r" style="color:var(--emerald)" title="2024">2.7%</td><td class="dim">Athens Stock Exchange</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">0.0%</td><td class="mono r" style="color:var(--emerald)">+40.4%</td>
+<td class="mono dim">GREK</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Fair Value" data-msci="Frontier" data-region="Europe" data-access="Frontier" data-name="bulgaria">
+<td>32</td><td class="cn">Bulgaria</td><td>Europe</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">10.5x</td><td class="mono r">9.5%</td>
+<td class="mono r cvs-cell" data-cvs="0.121">+0.12</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">3.4%</td><td class="mono r" style="color:var(--emerald)" title="2024">2.4%</td><td class="dim">Bulgarian SE</td>
+<td><span class="badge access-frontier">Frontier</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">WFE Statistics Team</td></tr>
+<tr data-tier="Fair Value" data-msci="Non-MSCI" data-region="Europe" data-access="Restricted" data-name="malta">
+<td>33</td><td class="cn">Malta</td><td>Europe</td>
+<td><span class="badge msci-non-msci">Non-MSCI</span></td>
+<td class="mono r">10.5x</td><td class="mono r">9.5%</td>
+<td class="mono r cvs-cell" data-cvs="0.121">+0.12</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--emerald)" title="2024">6.8%</td><td class="mono r" style="color:var(--emerald)" title="2024">1.7%</td><td class="dim">Malta Stock Exchange (MSE)</td>
+<td><span class="badge access-restricted">Restricted</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">SimplyWall.st aggregated est. — MSE ~10.5x (2024–2025), below 3yr avg 15.0x; retail analytics platform, not primary source — verify vs. MSE annual report before citing</td></tr>
+<tr data-tier="Fair Value" data-msci="Frontier" data-region="Middle East" data-access="Frontier" data-name="oman">
+<td>34</td><td class="cn">Oman</td><td>Middle East</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">10.8x</td><td class="mono r">9.3%</td>
+<td class="mono r cvs-cell" data-cvs="0.063">+0.06</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">1.6%</td><td class="mono r" style="color:var(--emerald)" title="2024">0.6%</td><td class="dim">Muscat Stock Exchange</td>
+<td><span class="badge access-frontier">Frontier</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">Fund Portfolio (2025)</td></tr>
+<tr data-tier="Fair Value" data-msci="Non-MSCI" data-region="Latin America" data-access="Restricted" data-name="bolivia">
+<td>35</td><td class="cn">Bolivia</td><td>Latin America</td>
+<td><span class="badge msci-non-msci">Non-MSCI</span></td>
+<td class="mono r">10.9x</td><td class="mono r">9.2%</td>
+<td class="mono r cvs-cell" data-cvs="0.043">+0.04</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--red2)" title="2024">-1.1%</td><td class="mono r" style="color:var(--amber2)" title="2024">5.1%</td><td class="dim">Bolsa Boliviana de Valores</td>
+<td><span class="badge access-restricted">Restricted</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">BBV Annual Report (Est. 2024)</td></tr>
+<tr data-tier="Fair Value" data-msci="Emerging" data-region="Europe" data-access="Open" data-name="turkey">
+<td>36</td><td class="cn">Turkey</td><td>Europe</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">11.2x</td><td class="mono r">8.9%</td>
+<td class="mono r cvs-cell" data-cvs="-0.01">-0.01</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">3.3%</td><td class="mono r" style="color:var(--red2)" title="2024">58.5%</td><td class="dim">Borsa Istanbul</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">2.0%</td><td class="mono r" style="color:var(--emerald2)">+4.7%</td>
+<td class="mono dim">TUR</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Fair Value" data-msci="Frontier" data-region="Africa" data-access="Frontier" data-name="mauritius">
+<td>37</td><td class="cn">Mauritius</td><td>Africa</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">11.2x</td><td class="mono r">8.9%</td>
+<td class="mono r cvs-cell" data-cvs="-0.01">-0.01</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">4.9%</td><td class="mono r" style="color:var(--amber2)" title="2024">3.6%</td><td class="dim">SE of Mauritius</td>
+<td><span class="badge access-frontier">Frontier</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">WFE Statistics Team</td></tr>
+<tr data-tier="Fair Value" data-msci="Standalone" data-region="Latin America" data-access="Restricted" data-name="panama">
+<td>38</td><td class="cn">Panama</td><td>Latin America</td>
+<td><span class="badge msci-standalone">Standalone</span></td>
+<td class="mono r">11.2x</td><td class="mono r">8.9%</td>
+<td class="mono r cvs-cell" data-cvs="-0.01">-0.01</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">2.7%</td><td class="mono r" style="color:var(--emerald)" title="2024">0.7%</td><td class="dim">Latinex</td>
+<td><span class="badge access-restricted">Restricted</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">WFE Statistics Team</td></tr>
+<tr data-tier="Fair Value" data-msci="Non-MSCI" data-region="Africa" data-access="Controlled" data-name="zimbabwe">
+<td>39</td><td class="cn">Zimbabwe</td><td>Africa</td>
+<td><span class="badge msci-non-msci">Non-MSCI</span></td>
+<td class="mono r">11.2x</td><td class="mono r">8.9%</td>
+<td class="mono r cvs-cell" data-cvs="-0.01">-0.01</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">1.7%</td><td class="mono r" style="color:var(--red2)" title="2022">104.7%</td><td class="dim">Victoria Falls Exch</td>
+<td><span class="badge access-controlled">Controlled</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">VFEX Local (USD)</td></tr>
+<tr data-tier="Fair Value" data-msci="Non-MSCI" data-region="Africa" data-access="Restricted" data-name="ivory coast">
+<td>40</td><td class="cn">Ivory Coast</td><td>Africa</td>
+<td><span class="badge msci-non-msci">Non-MSCI</span></td>
+<td class="mono r">11.4x</td><td class="mono r">8.8%</td>
+<td class="mono r cvs-cell" data-cvs="-0.046">-0.05</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--emerald)" title="2024">6.0%</td><td class="mono r" style="color:var(--amber2)" title="2024">3.5%</td><td class="dim">BRVM (8-nation West Africa)</td>
+<td><span class="badge access-restricted">Restricted</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">BRVM Official Statistics (2024)</td></tr>
+<tr data-tier="Fair Value" data-msci="Emerging" data-region="Europe" data-access="Open" data-name="hungary">
+<td>41</td><td class="cn">Hungary</td><td>Europe</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">11.5x</td><td class="mono r">8.7%</td>
+<td class="mono r cvs-cell" data-cvs="-0.061">-0.06</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">0.6%</td><td class="mono r" style="color:var(--amber2)" title="2024">3.7%</td><td class="dim">Budapest SE</td>
+<td><span class="badge access-open">Open</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Fair Value" data-msci="Frontier" data-region="Europe" data-access="Frontier" data-name="croatia">
+<td>42</td><td class="cn">Croatia</td><td>Europe</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">11.5x</td><td class="mono r">8.7%</td>
+<td class="mono r cvs-cell" data-cvs="-0.061">-0.06</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">3.8%</td><td class="mono r" style="color:var(--emerald)" title="2024">3.0%</td><td class="dim">Zagreb Stock Exchange</td>
+<td><span class="badge access-frontier">Frontier</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">WFE Statistics Team</td></tr>
+<tr data-tier="Fair Value" data-msci="Emerging" data-region="Europe" data-access="Open" data-name="poland">
+<td>43</td><td class="cn">Poland</td><td>Europe</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">11.8x</td><td class="mono r">8.5%</td>
+<td class="mono r cvs-cell" data-cvs="-0.112">-0.11</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">3.0%</td><td class="mono r" style="color:var(--amber2)" title="2024">3.8%</td><td class="dim">Warsaw Stock Exchange</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">4.4%</td><td class="mono r" style="color:var(--emerald)">+32.0%</td>
+<td class="mono dim">EPOL</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Fair Value" data-msci="Frontier" data-region="Europe" data-access="Frontier" data-name="latvia">
+<td>44</td><td class="cn">Latvia</td><td>Europe</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">12.0x</td><td class="mono r">8.3%</td>
+<td class="mono r cvs-cell" data-cvs="-0.144">-0.14</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--red2)" title="2024">-0.0%</td><td class="mono r" style="color:var(--emerald)" title="2024">1.3%</td><td class="dim">Nasdaq Riga</td>
+<td><span class="badge access-frontier">Frontier</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">MSCI Latvia Country Index TTM (Float-adj) — factsheet Feb 2026</td></tr>
+<tr data-tier="Fair Value" data-msci="Emerging" data-region="Latin America" data-access="Open" data-name="brazil">
+<td>45</td><td class="cn">Brazil</td><td>Latin America</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">12.3x</td><td class="mono r">8.1%</td>
+<td class="mono r cvs-cell" data-cvs="-0.19">-0.19</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">3.4%</td><td class="mono r" style="color:var(--amber2)" title="2024">4.4%</td><td class="dim">B3 - Brasil Bolsa Balcão</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">4.3%</td><td class="mono r" style="color:var(--emerald)">+51.5%</td>
+<td class="mono dim">EWZ, FBZ</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Fair Value" data-msci="Emerging" data-region="Europe" data-access="Open" data-name="czech republic">
+<td>46</td><td class="cn">Czech Republic</td><td>Europe</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">12.4x</td><td class="mono r">8.1%</td>
+<td class="mono r cvs-cell" data-cvs="-0.204">-0.20</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">1.2%</td><td class="mono r" style="color:var(--emerald)" title="2024">2.4%</td><td class="dim">Prague Stock Exchange</td>
+<td><span class="badge access-open">Open</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Fair Value" data-msci="Emerging" data-region="Middle East" data-access="Open" data-name="qatar">
+<td>47</td><td class="cn">Qatar</td><td>Middle East</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">12.5x</td><td class="mono r">8.0%</td>
+<td class="mono r cvs-cell" data-cvs="-0.217">-0.22</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">2.4%</td><td class="mono r" style="color:var(--emerald)" title="2024">1.3%</td><td class="dim">Qatar Stock Exchange</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">3.4%</td><td class="mono r" style="color:var(--emerald2)">+7.9%</td>
+<td class="mono dim">QAT</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Fair Value" data-msci="Standalone" data-region="Latin America" data-access="Controlled" data-name="argentina">
+<td>48</td><td class="cn">Argentina</td><td>Latin America</td>
+<td><span class="badge msci-standalone">Standalone</span></td>
+<td class="mono r">12.5x</td><td class="mono r">8.0%</td>
+<td class="mono r cvs-cell" data-cvs="-0.217">-0.22</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--red2)" title="2024">-1.3%</td><td class="mono r" style="color:var(--red2)" title="2024">219.9%</td><td class="dim">Bolsa de Comercio (BYMA)</td>
+<td><span class="badge access-controlled">Controlled</span></td><td class="mono r" style="color:var(--emerald)">0.9%</td><td class="mono r" style="color:var(--emerald2)">+5.9%</td>
+<td class="mono dim">ARGT</td>
+<td class="dim small">Local Index TTM (Merval)</td></tr>
+<tr data-tier="Fair Value" data-msci="Frontier" data-region="Europe" data-access="Frontier" data-name="lithuania">
+<td>49</td><td class="cn">Lithuania</td><td>Europe</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">12.8x</td><td class="mono r">7.8%</td>
+<td class="mono r cvs-cell" data-cvs="-0.259">-0.26</td>
+<td><span class="tier-pill fair_value">Fair Value</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">2.8%</td><td class="mono r" style="color:var(--emerald)" title="2024">0.7%</td><td class="dim">Nasdaq Vilnius</td>
+<td><span class="badge access-frontier">Frontier</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">MSCI Lithuania Country Index TTM (Float-adj) — factsheet Feb 2026</td></tr>
+<tr data-tier="Expensive" data-msci="Non-MSCI" data-region="Latin America" data-access="Restricted" data-name="trinidad and tobago">
+<td>50</td><td class="cn">Trinidad and Tobago</td><td>Latin America</td>
+<td><span class="badge msci-non-msci">Non-MSCI</span></td>
+<td class="mono r">13.2x</td><td class="mono r">7.6%</td>
+<td class="mono r cvs-cell" data-cvs="-0.31">-0.31</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">2.5%</td><td class="mono r" style="color:var(--emerald)" title="2024">0.5%</td><td class="dim">TT Stock Exchange (TTSE)</td>
+<td><span class="badge access-restricted">Restricted</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">WFE Statistics Team</td></tr>
+<tr data-tier="Expensive" data-msci="Emerging" data-region="Africa" data-access="Open" data-name="south africa">
+<td>51</td><td class="cn">South Africa</td><td>Africa</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">13.5x</td><td class="mono r">7.4%</td>
+<td class="mono r cvs-cell" data-cvs="-0.348">-0.35</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">0.5%</td><td class="mono r" style="color:var(--amber2)" title="2024">4.4%</td><td class="dim">Johannesburg SE</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">5.2%</td><td class="mono r" style="color:var(--emerald)">+55.7%</td>
+<td class="mono dim">EZA</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Frontier" data-region="Europe" data-access="Frontier" data-name="estonia">
+<td>52</td><td class="cn">Estonia</td><td>Europe</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">13.5x</td><td class="mono r">7.4%</td>
+<td class="mono r cvs-cell" data-cvs="-0.348">-0.35</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--red2)" title="2024">-0.1%</td><td class="mono r" style="color:var(--amber2)" title="2024">3.5%</td><td class="dim">Nasdaq Tallinn</td>
+<td><span class="badge access-frontier">Frontier</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">MSCI Estonia Country Index TTM (Float-adj) — factsheet Feb 2026</td></tr>
+<tr data-tier="Expensive" data-msci="Standalone" data-region="Latin America" data-access="Restricted" data-name="jamaica">
+<td>53</td><td class="cn">Jamaica</td><td>Latin America</td>
+<td><span class="badge msci-standalone">Standalone</span></td>
+<td class="mono r">13.5x</td><td class="mono r">7.4%</td>
+<td class="mono r cvs-cell" data-cvs="-0.348">-0.35</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--red2)" title="2024">-0.5%</td><td class="mono r" style="color:var(--amber2)" title="2024">5.4%</td><td class="dim">Jamaica SE</td>
+<td><span class="badge access-restricted">Restricted</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">WFE Statistics Team</td></tr>
+<tr data-tier="Expensive" data-msci="Emerging" data-region="Asia-Pacific" data-access="Open" data-name="indonesia">
+<td>54</td><td class="cn">Indonesia</td><td>Asia-Pacific</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">14.2x</td><td class="mono r">7.0%</td>
+<td class="mono r cvs-cell" data-cvs="-0.43">-0.43</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--emerald)" title="2024">5.0%</td><td class="mono r" style="color:var(--emerald)" title="2024">2.2%</td><td class="dim">Indonesia SE</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">3.7%</td><td class="mono r" style="color:var(--red2)">-3.8%</td>
+<td class="mono dim">EIDO, IDX</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Developed" data-region="Europe" data-access="Open" data-name="portugal">
+<td>55</td><td class="cn">Portugal</td><td>Europe</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">14.5x</td><td class="mono r">6.9%</td>
+<td class="mono r cvs-cell" data-cvs="-0.461">-0.46</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">2.1%</td><td class="mono r" style="color:var(--emerald)" title="2024">2.4%</td><td class="dim">Euronext Lisbon</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">4.3%</td><td class="na">—</td>
+<td class="mono dim">PGAL</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Emerging" data-region="Middle East" data-access="Open" data-name="uae">
+<td>56</td><td class="cn">UAE</td><td>Middle East</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">14.5x</td><td class="mono r">6.9%</td>
+<td class="mono r cvs-cell" data-cvs="-0.461">-0.46</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">4.0%</td><td class="mono r" style="color:var(--emerald)" title="2024">1.7%</td><td class="dim">ADX / DFM</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">3.7%</td><td class="mono r" style="color:var(--emerald2)">+10.6%</td>
+<td class="mono dim">UAE</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Emerging" data-region="Middle East" data-access="Open" data-name="kuwait">
+<td>57</td><td class="cn">Kuwait</td><td>Middle East</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">14.8x</td><td class="mono r">6.8%</td>
+<td class="mono r cvs-cell" data-cvs="-0.492">-0.49</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--red2)" title="2024">-2.6%</td><td class="mono r" style="color:var(--emerald)" title="2024">2.9%</td><td class="dim">Boursa Kuwait</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">0.0%</td><td class="mono r" style="color:var(--emerald2)">+10.8%</td>
+<td class="mono dim">KWT</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Standalone" data-region="Latin America" data-access="Restricted" data-name="bermuda">
+<td>58</td><td class="cn">Bermuda</td><td>Latin America</td>
+<td><span class="badge msci-standalone">Standalone</span></td>
+<td class="mono r">14.8x</td><td class="mono r">6.8%</td>
+<td class="mono r cvs-cell" data-cvs="-0.492">-0.49</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--emerald)" title="2024">6.0%</td><td class="mono r" style="" title=""><span class="na">—</span></td><td class="dim">Bermuda SE</td>
+<td><span class="badge access-restricted">Restricted</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">WFE Statistics Team</td></tr>
+<tr data-tier="Expensive" data-msci="Emerging" data-region="Latin America" data-access="Open" data-name="chile">
+<td>59</td><td class="cn">Chile</td><td>Latin America</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">14.9x</td><td class="mono r">6.7%</td>
+<td class="mono r cvs-cell" data-cvs="-0.504">-0.50</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">2.6%</td><td class="mono r" style="color:var(--amber2)" title="2024">4.3%</td><td class="dim">Santiago Stock Exchange</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">1.9%</td><td class="mono r" style="color:var(--emerald)">+34.0%</td>
+<td class="mono dim">ECH</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Emerging" data-region="Asia-Pacific" data-access="Open" data-name="south korea">
+<td>60</td><td class="cn">South Korea</td><td>Asia-Pacific</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">14.9x</td><td class="mono r">6.7%</td>
+<td class="mono r cvs-cell" data-cvs="-0.508">-0.51</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">2.0%</td><td class="mono r" style="color:var(--emerald)" title="2024">2.3%</td><td class="dim">Korea Exchange</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">1.4%</td><td class="mono r" style="color:var(--emerald)">+131.4%</td>
+<td class="mono dim">EWY, FLKR</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Emerging" data-region="Asia-Pacific" data-access="Open" data-name="philippines">
+<td>61</td><td class="cn">Philippines</td><td>Asia-Pacific</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">15.1x</td><td class="mono r">6.6%</td>
+<td class="mono r cvs-cell" data-cvs="-0.524">-0.52</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--emerald)" title="2024">5.7%</td><td class="mono r" style="color:var(--amber2)" title="2024">3.2%</td><td class="dim">Philippine SE</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">1.9%</td><td class="mono r" style="color:var(--emerald2)">+0.3%</td>
+<td class="mono dim">EPHE</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Frontier" data-region="Africa" data-access="Frontier" data-name="morocco">
+<td>62</td><td class="cn">Morocco</td><td>Africa</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">15.1x</td><td class="mono r">6.6%</td>
+<td class="mono r cvs-cell" data-cvs="-0.524">-0.52</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">3.8%</td><td class="mono r" style="color:var(--emerald)" title="2024">1.0%</td><td class="dim">Bourse de Casablanca</td>
+<td><span class="badge access-frontier">Frontier</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Developed" data-region="Europe" data-access="Open" data-name="united kingdom">
+<td>63</td><td class="cn">United Kingdom</td><td>Europe</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">15.3x</td><td class="mono r">6.5%</td>
+<td class="mono r cvs-cell" data-cvs="-0.548">-0.55</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">1.1%</td><td class="mono r" style="color:var(--amber2)" title="2024">3.3%</td><td class="dim">London Stock Exchange</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">3.4%</td><td class="mono r" style="color:var(--emerald)">+27.3%</td>
+<td class="mono dim">EWU, FKU</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Developed" data-region="Europe" data-access="Open" data-name="spain">
+<td>64</td><td class="cn">Spain</td><td>Europe</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">15.9x</td><td class="mono r">6.3%</td>
+<td class="mono r cvs-cell" data-cvs="-0.597">-0.60</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">3.5%</td><td class="mono r" style="color:var(--emerald)" title="2024">2.8%</td><td class="dim">BME Spanish Exchanges</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">2.1%</td><td class="mono r" style="color:var(--emerald)">+45.8%</td>
+<td class="mono dim">EWP</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Emerging" data-region="Asia-Pacific" data-access="Open" data-name="thailand">
+<td>65</td><td class="cn">Thailand</td><td>Asia-Pacific</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">16.0x</td><td class="mono r">6.2%</td>
+<td class="mono r cvs-cell" data-cvs="-0.606">-0.61</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">2.5%</td><td class="mono r" style="color:var(--emerald)" title="2024">1.4%</td><td class="dim">Stock Exchange of Thailand</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">2.7%</td><td class="mono r" style="color:var(--emerald)">+29.8%</td>
+<td class="mono dim">THD</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Developed" data-region="Europe" data-access="Open" data-name="austria">
+<td>66</td><td class="cn">Austria</td><td>Europe</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">16.2x</td><td class="mono r">6.2%</td>
+<td class="mono r cvs-cell" data-cvs="-0.624">-0.62</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--red2)" title="2024">-0.7%</td><td class="mono r" style="color:var(--emerald)" title="2024">2.9%</td><td class="dim">Vienna Stock Exchange</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">2.2%</td><td class="mono r" style="color:var(--emerald)">+38.3%</td>
+<td class="mono dim">EWO</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Developed" data-region="Europe" data-access="Open" data-name="italy">
+<td>67</td><td class="cn">Italy</td><td>Europe</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">16.5x</td><td class="mono r">6.1%</td>
+<td class="mono r cvs-cell" data-cvs="-0.648">-0.65</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">0.7%</td><td class="mono r" style="color:var(--emerald)" title="2024">1.0%</td><td class="dim">Borsa Italiana</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">2.6%</td><td class="mono r" style="color:var(--emerald)">+28.2%</td>
+<td class="mono dim">EWI</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Developed" data-region="Middle East" data-access="Open" data-name="israel">
+<td>68</td><td class="cn">Israel</td><td>Middle East</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">16.5x</td><td class="mono r">6.1%</td>
+<td class="mono r cvs-cell" data-cvs="-0.648">-0.65</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">0.9%</td><td class="mono r" style="color:var(--amber2)" title="2024">3.1%</td><td class="dim">Tel Aviv SE</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">1.3%</td><td class="mono r" style="color:var(--emerald)">+56.6%</td>
+<td class="mono dim">EIS</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Emerging" data-region="Asia-Pacific" data-access="Open" data-name="malaysia">
+<td>69</td><td class="cn">Malaysia</td><td>Asia-Pacific</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">16.5x</td><td class="mono r">6.1%</td>
+<td class="mono r cvs-cell" data-cvs="-0.648">-0.65</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--emerald)" title="2024">5.1%</td><td class="mono r" style="color:var(--emerald)" title="2024">1.8%</td><td class="dim">Bursa Malaysia</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">3.2%</td><td class="mono r" style="color:var(--emerald)">+29.9%</td>
+<td class="mono dim">EWM</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Emerging" data-region="Middle East" data-access="Open" data-name="saudi arabia">
+<td>70</td><td class="cn">Saudi Arabia</td><td>Middle East</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">16.8x</td><td class="mono r">6.0%</td>
+<td class="mono r cvs-cell" data-cvs="-0.673">-0.67</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">2.0%</td><td class="mono r" style="color:var(--emerald)" title="2024">1.7%</td><td class="dim">Saudi SE (Tadawul)</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">2.9%</td><td class="mono r" style="color:var(--red2)">-3.0%</td>
+<td class="mono dim">KSA</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Emerging" data-region="Latin America" data-access="Open" data-name="mexico">
+<td>71</td><td class="cn">Mexico</td><td>Latin America</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">17.5x</td><td class="mono r">5.7%</td>
+<td class="mono r cvs-cell" data-cvs="-0.721">-0.72</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">1.4%</td><td class="mono r" style="color:var(--amber2)" title="2024">4.7%</td><td class="dim">Bolsa Mexicana de Valores</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">3.0%</td><td class="mono r" style="color:var(--emerald)">+45.8%</td>
+<td class="mono dim">EWW</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Developed" data-region="Europe" data-access="Open" data-name="norway">
+<td>72</td><td class="cn">Norway</td><td>Europe</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">17.5x</td><td class="mono r">5.7%</td>
+<td class="mono r cvs-cell" data-cvs="-0.726">-0.73</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">2.1%</td><td class="mono r" style="color:var(--amber2)" title="2024">3.1%</td><td class="dim">Oslo Børs</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">0.0%</td><td class="mono r" style="color:var(--emerald)">+42.3%</td>
+<td class="mono dim">NORW</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Developed" data-region="Asia-Pacific" data-access="Open" data-name="hong kong">
+<td>73</td><td class="cn">Hong Kong</td><td>Asia-Pacific</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">17.7x</td><td class="mono r">5.7%</td>
+<td class="mono r cvs-cell" data-cvs="-0.739">-0.74</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">2.5%</td><td class="mono r" style="color:var(--emerald)" title="2024">1.7%</td><td class="dim">Hong Kong SE</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">4.6%</td><td class="mono r" style="color:var(--emerald)">+32.2%</td>
+<td class="mono dim">EWH, FHK</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Developed" data-region="Asia-Pacific" data-access="Open" data-name="singapore">
+<td>74</td><td class="cn">Singapore</td><td>Asia-Pacific</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">17.8x</td><td class="mono r">5.6%</td>
+<td class="mono r cvs-cell" data-cvs="-0.748">-0.75</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">4.4%</td><td class="mono r" style="color:var(--emerald)" title="2024">2.4%</td><td class="dim">Singapore Exchange</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">3.9%</td><td class="mono r" style="color:var(--emerald)">+23.2%</td>
+<td class="mono dim">EWS</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Developed" data-region="Europe" data-access="Open" data-name="belgium">
+<td>75</td><td class="cn">Belgium</td><td>Europe</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">17.9x</td><td class="mono r">5.6%</td>
+<td class="mono r cvs-cell" data-cvs="-0.753">-0.75</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">1.1%</td><td class="mono r" style="color:var(--amber2)" title="2024">3.1%</td><td class="dim">Euronext Brussels</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">1.6%</td><td class="mono r" style="color:var(--emerald)">+25.2%</td>
+<td class="mono dim">EWK</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Frontier" data-region="Europe" data-access="Frontier" data-name="iceland">
+<td>76</td><td class="cn">Iceland</td><td>Europe</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">18.2x</td><td class="mono r">5.5%</td>
+<td class="mono r cvs-cell" data-cvs="-0.775">-0.78</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--red2)" title="2024">-1.0%</td><td class="mono r" style="color:var(--amber2)" title="2024">5.9%</td><td class="dim">Nasdaq Iceland</td>
+<td><span class="badge access-frontier">Frontier</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Developed" data-region="Europe" data-access="Open" data-name="france">
+<td>77</td><td class="cn">France</td><td>Europe</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">18.5x</td><td class="mono r">5.4%</td>
+<td class="mono r cvs-cell" data-cvs="-0.793">-0.79</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">1.2%</td><td class="mono r" style="color:var(--emerald)" title="2024">2.0%</td><td class="dim">Euronext Paris</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">2.5%</td><td class="mono r" style="color:var(--emerald2)">+8.9%</td>
+<td class="mono dim">EWQ</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Developed" data-region="Europe" data-access="Open" data-name="ireland">
+<td>78</td><td class="cn">Ireland</td><td>Europe</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">18.5x</td><td class="mono r">5.4%</td>
+<td class="mono r cvs-cell" data-cvs="-0.793">-0.79</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">2.6%</td><td class="mono r" style="color:var(--emerald)" title="2024">2.1%</td><td class="dim">Euronext Dublin</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">2.7%</td><td class="mono r" style="color:var(--emerald2)">+16.3%</td>
+<td class="mono dim">EIRL</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Developed" data-region="Europe" data-access="Open" data-name="germany">
+<td>79</td><td class="cn">Germany</td><td>Europe</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">18.6x</td><td class="mono r">5.4%</td>
+<td class="mono r cvs-cell" data-cvs="-0.799">-0.80</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--red2)" title="2024">-0.5%</td><td class="mono r" style="color:var(--emerald)" title="2024">2.3%</td><td class="dim">Deutsche Börse</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">1.5%</td><td class="mono r" style="color:var(--emerald2)">+7.9%</td>
+<td class="mono dim">EWG, FGM</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Emerging" data-region="Latin America" data-access="Open" data-name="peru">
+<td>80</td><td class="cn">Peru</td><td>Latin America</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">18.6x</td><td class="mono r">5.4%</td>
+<td class="mono r cvs-cell" data-cvs="-0.801">-0.80</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">3.3%</td><td class="mono r" style="color:var(--emerald)" title="2024">2.0%</td><td class="dim">Bolsa de Valores de Lima</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">1.3%</td><td class="mono r" style="color:var(--emerald)">+95.5%</td>
+<td class="mono dim">EPU</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Developed" data-region="Europe" data-access="Open" data-name="finland">
+<td>81</td><td class="cn">Finland</td><td>Europe</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">19.8x</td><td class="mono r">5.0%</td>
+<td class="mono r cvs-cell" data-cvs="-0.873">-0.87</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">0.4%</td><td class="mono r" style="color:var(--emerald)" title="2024">1.6%</td><td class="dim">Nasdaq Helsinki</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">3.2%</td><td class="mono r" style="color:var(--emerald)">+34.3%</td>
+<td class="mono dim">EFNL</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Developed" data-region="Europe" data-access="Open" data-name="netherlands">
+<td>82</td><td class="cn">Netherlands</td><td>Europe</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">20.1x</td><td class="mono r">5.0%</td>
+<td class="mono r cvs-cell" data-cvs="-0.888">-0.89</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">1.1%</td><td class="mono r" style="color:var(--amber2)" title="2024">3.3%</td><td class="dim">Euronext Amsterdam</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">4.6%</td><td class="mono r" style="color:var(--emerald)">+29.9%</td>
+<td class="mono dim">EWN</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Developed" data-region="North America" data-access="Open" data-name="canada">
+<td>83</td><td class="cn">Canada</td><td>North America</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">20.2x</td><td class="mono r">5.0%</td>
+<td class="mono r cvs-cell" data-cvs="-0.895">-0.90</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">1.6%</td><td class="mono r" style="color:var(--emerald)" title="2024">2.4%</td><td class="dim">TMX Group</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">1.4%</td><td class="mono r" style="color:var(--emerald)">+42.7%</td>
+<td class="mono dim">EWC, FCAN</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Developed" data-region="Asia-Pacific" data-access="Open" data-name="japan">
+<td>84</td><td class="cn">Japan</td><td>Asia-Pacific</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">20.9x</td><td class="mono r">4.8%</td>
+<td class="mono r cvs-cell" data-cvs="-0.93">-0.93</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">0.1%</td><td class="mono r" style="color:var(--emerald)" title="2024">2.7%</td><td class="dim">Tokyo Stock Exchange</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">4.0%</td><td class="mono r" style="color:var(--emerald)">+26.2%</td>
+<td class="mono dim">EWJ, JPXN</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Emerging" data-region="Asia-Pacific" data-access="Open" data-name="taiwan">
+<td>85</td><td class="cn">Taiwan</td><td>Asia-Pacific</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">21.0x</td><td class="mono r">4.8%</td>
+<td class="mono r cvs-cell" data-cvs="-0.937">-0.94</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="" title=""><span class="na">—</span></td><td class="mono r" style="" title=""><span class="na">—</span></td><td class="dim">Taiwan SE</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">1.3%</td><td class="mono r" style="color:var(--emerald)">+47.8%</td>
+<td class="mono dim">EWT</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Developed" data-region="Europe" data-access="Open" data-name="sweden">
+<td>86</td><td class="cn">Sweden</td><td>Europe</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">21.4x</td><td class="mono r">4.7%</td>
+<td class="mono r cvs-cell" data-cvs="-0.959">-0.96</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">0.8%</td><td class="mono r" style="color:var(--emerald)" title="2024">2.8%</td><td class="dim">Nasdaq Stockholm</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">2.9%</td><td class="mono r" style="color:var(--emerald2)">+18.8%</td>
+<td class="mono dim">EWD</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Expensive" data-msci="Developed" data-region="Europe" data-access="Open" data-name="switzerland">
+<td>87</td><td class="cn">Switzerland</td><td>Europe</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">22.1x</td><td class="mono r">4.5%</td>
+<td class="mono r cvs-cell" data-cvs="-0.99">-0.99</td>
+<td><span class="tier-pill expensive">Expensive</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">1.3%</td><td class="mono r" style="color:var(--emerald)" title="2024">1.1%</td><td class="dim">SIX Swiss Exchange</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">1.6%</td><td class="mono r" style="color:var(--emerald2)">+14.9%</td>
+<td class="mono dim">EWL, FSZ</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Very Expensive" data-msci="Developed" data-region="Europe" data-access="Open" data-name="denmark">
+<td>88</td><td class="cn">Denmark</td><td>Europe</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">23.2x</td><td class="mono r">4.3%</td>
+<td class="mono r cvs-cell" data-cvs="-1.037">-1.04</td>
+<td><span class="tier-pill very_expensive">Very Expensive</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">3.5%</td><td class="mono r" style="color:var(--emerald)" title="2024">1.4%</td><td class="dim">Nasdaq Copenhagen</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">3.0%</td><td class="mono r" style="color:var(--red2)">-3.5%</td>
+<td class="mono dim">EDEN</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Very Expensive" data-msci="Non-MSCI" data-region="Asia-Pacific" data-access="Restricted" data-name="nepal">
+<td>89</td><td class="cn">Nepal</td><td>Asia-Pacific</td>
+<td><span class="badge msci-non-msci">Non-MSCI</span></td>
+<td class="mono r">23.5x</td><td class="mono r">4.3%</td>
+<td class="mono r cvs-cell" data-cvs="-1.048">-1.05</td>
+<td><span class="tier-pill very_expensive">Very Expensive</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">3.7%</td><td class="mono r" style="color:var(--amber2)" title="2024">4.7%</td><td class="dim">Nepal Stock Exchange (NEPSE)</td>
+<td><span class="badge access-restricted">Restricted</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">NEPSE Annual Stats (Est. FY2024-25)</td></tr>
+<tr data-tier="Very Expensive" data-msci="Developed" data-region="Asia-Pacific" data-access="Open" data-name="australia">
+<td>90</td><td class="cn">Australia</td><td>Asia-Pacific</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">24.0x</td><td class="mono r">4.2%</td>
+<td class="mono r cvs-cell" data-cvs="-1.07">-1.07</td>
+<td><span class="tier-pill very_expensive">Very Expensive</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">1.4%</td><td class="mono r" style="color:var(--amber2)" title="2024">3.2%</td><td class="dim">ASX</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">2.8%</td><td class="mono r" style="color:var(--emerald)">+26.1%</td>
+<td class="mono dim">EWA, FAUS</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Very Expensive" data-msci="Emerging" data-region="Asia-Pacific" data-access="Open" data-name="india">
+<td>91</td><td class="cn">India</td><td>Asia-Pacific</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">24.5x</td><td class="mono r">4.1%</td>
+<td class="mono r cvs-cell" data-cvs="-1.088">-1.09</td>
+<td><span class="tier-pill very_expensive">Very Expensive</span></td>
+<td class="mono r" style="color:var(--emerald)" title="2024">6.5%</td><td class="mono r" style="color:var(--amber2)" title="2024">5.0%</td><td class="dim">NSE / BSE</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">0.0%</td><td class="mono r" style="color:var(--red2)">-0.8%</td>
+<td class="mono dim">INDA, NFTY</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Very Expensive" data-msci="Developed" data-region="North America" data-access="Open" data-name="united states">
+<td>92</td><td class="cn">United States</td><td>North America</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">27.8x</td><td class="mono r">3.6%</td>
+<td class="mono r cvs-cell" data-cvs="-1.195">-1.20</td>
+<td><span class="tier-pill very_expensive">Very Expensive</span></td>
+<td class="mono r" style="color:var(--blue2)" title="2024">2.8%</td><td class="mono r" style="color:var(--emerald)" title="2024">2.9%</td><td class="dim">NYSE / Nasdaq</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">1.1%</td><td class="mono r" style="color:var(--emerald)">+22.0%</td>
+<td class="mono dim">VTI, SPY, EUSA</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Very Expensive" data-msci="Developed" data-region="Asia-Pacific" data-access="Open" data-name="new zealand">
+<td>93</td><td class="cn">New Zealand</td><td>Asia-Pacific</td>
+<td><span class="badge msci-developed">Developed</span></td>
+<td class="mono r">36.4x</td><td class="mono r">2.8%</td>
+<td class="mono r cvs-cell" data-cvs="-1.384">-1.38</td>
+<td><span class="tier-pill very_expensive">Very Expensive</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">1.3%</td><td class="mono r" style="color:var(--emerald)" title="2024">2.9%</td><td class="dim">NZX Limited</td>
+<td><span class="badge access-open">Open</span></td><td class="mono r" style="color:var(--emerald)">2.1%</td><td class="mono r" style="color:var(--emerald2)">+7.5%</td>
+<td class="mono dim">ENZL</td>
+<td class="dim small">MSCI TTM (Float-adj)</td></tr>
+<tr data-tier="Very Expensive" data-msci="Non-MSCI" data-region="Africa" data-access="Restricted" data-name="malawi">
+<td>94</td><td class="cn">Malawi</td><td>Africa</td>
+<td><span class="badge msci-non-msci">Non-MSCI</span></td>
+<td class="mono r">42.6x</td><td class="mono r">2.4%</td>
+<td class="mono r cvs-cell" data-cvs="-1.473">-1.47</td>
+<td><span class="tier-pill very_expensive">Very Expensive</span></td>
+<td class="mono r" style="color:var(--amber2)" title="2024">1.7%</td><td class="mono r" style="color:var(--red2)" title="2024">32.2%</td><td class="dim">Malawi Stock Exchange</td>
+<td><span class="badge access-restricted">Restricted</span></td><td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td>
+<td class="dim small">Cedar Capital Q3-2025 (P/E 42.6x, P/B 14.1x, yield 1.2%) via African Capital Markets News; rising trend (19.3x 3yr avg → 27.6x 2024 → 42.6x 2025); inflation-distorted</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="section">
+<div class="section-head"><h2>Best Investable Opportunities</h2><span class="pill">20 MARKETS · LONG-ONLY FILTER</span></div>
+<p style="color:var(--text2);font-size:.82rem;margin-bottom:20px;max-width:900px">Top markets by Composite Value Score filtered to <strong style="color:var(--emerald)">Open</strong>, <strong style="color:var(--cyan)">Frontier</strong>, and <strong style="color:var(--blue2)">Accessible</strong> markets only — excluding sanctioned, conflict-affected, and capital-controlled markets. <strong style="color:var(--text)">PEG-Lite</strong> = P/E ÷ GDP Growth (lower = cheap with growth). Div Yield and 1yr Return from live ETF data (yfinance).</p>
+<div class="tbl-wrap best-table">
+<table id="bestTable">
+<thead><tr>
+<th title="CVS rank within Open + Frontier + Accessible markets only.">Rank</th>
+<th>Country</th>
+<th title="MSCI market classification tier.">MSCI</th>
+<th onclick="sortBest(3,'n')" title="Trailing 12-month P/E for the benchmark index. Lower = cheaper.">P/E</th>
+<th onclick="sortBest(4,'n')" title="Earnings Yield = 1 ÷ P/E. Higher = cheaper.">EY%</th>
+<th onclick="sortBest(5,'n')" title="Composite Value Score vs. all scored markets. Higher = statistically cheaper.">CVS</th>
+<th onclick="sortBest(6,'n')" title="P/E ÷ max(GDP Growth, 1.0). Rewards cheap markets with real growth. < 2.0x = green. Uses World Bank GDP data (typically 1–2 year lag).">PEG-Lite</th>
+<th title="Open, Frontier, and Accessible markets only. Controlled and Inaccessible excluded.">Access</th>
+<th onclick="sortBest(8,'n')" title="Trailing ETF dividend yield (yfinance). Income return only.">Div Yield</th>
+<th onclick="sortBest(9,'n')" title="1-year total ETF return in USD (yfinance).">1yr ETF</th>
+<th title="Primary country ETF ticker(s).">ETF</th>
+</tr></thead>
+<tbody><tr>
+<td>1</td><td class="cn">Kazakhstan</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">4.3x</td><td class="mono r">23.3%</td>
+<td class="mono r cvs-cell" data-cvs="3.175">+3.17</td>
+<td class="mono r" style="color:var(--emerald)">0.9</td>
+<td><span class="badge access-frontier">Frontier</span></td>
+<td class="na">—</td><td class="na">—</td>
+<td class="mono dim">KASPI (GDR)</td></tr>
+<tr>
+<td>2</td><td class="cn">Uzbekistan</td>
+<td><span class="badge msci-non-msci">Non-MSCI</span></td>
+<td class="mono r">5.3x</td><td class="mono r">19.0%</td>
+<td class="mono r cvs-cell" data-cvs="2.23">+2.23</td>
+<td class="mono r" style="color:var(--emerald)">0.8</td>
+<td><span class="badge access-accessible">Accessible</span></td>
+<td class="na">—</td><td class="na">—</td>
+<td class="mono dim">AFC Uzbekistan</td></tr>
+<tr>
+<td>3</td><td class="cn">Kenya</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">5.3x</td><td class="mono r">18.9%</td>
+<td class="mono r cvs-cell" data-cvs="2.199">+2.20</td>
+<td class="mono r" style="color:var(--emerald)">1.1</td>
+<td><span class="badge access-frontier">Frontier</span></td>
+<td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td></tr>
+<tr>
+<td>4</td><td class="cn">Nigeria</td>
+<td><span class="badge msci-standalone">Standalone</span></td>
+<td class="mono r">5.5x</td><td class="mono r">18.2%</td>
+<td class="mono r cvs-cell" data-cvs="2.046">+2.05</td>
+<td class="mono r" style="color:var(--emerald)">1.4</td>
+<td><span class="badge access-accessible">Accessible</span></td>
+<td class="na">—</td><td class="na">—</td>
+<td class="mono dim">NGE</td></tr>
+<tr>
+<td>5</td><td class="cn">Pakistan</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">6.0x</td><td class="mono r">16.7%</td>
+<td class="mono r cvs-cell" data-cvs="1.71">+1.71</td>
+<td class="mono r" style="color:var(--emerald)">2.0</td>
+<td><span class="badge access-frontier">Frontier</span></td>
+<td class="mono r" style="color:var(--emerald)">5.8%</td><td class="na">—</td>
+<td class="mono dim">PAK</td></tr>
+<tr>
+<td>6</td><td class="cn">Iraq</td>
+<td><span class="badge msci-non-msci">Non-MSCI</span></td>
+<td class="mono r">6.5x</td><td class="mono r">15.4%</td>
+<td class="mono r cvs-cell" data-cvs="1.424">+1.42</td>
+<td class="na">—</td>
+<td><span class="badge access-accessible">Accessible</span></td>
+<td class="na">—</td><td class="na">—</td>
+<td class="mono dim">AFC Iraq</td></tr>
+<tr>
+<td>7</td><td class="cn">Sri Lanka</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">7.5x</td><td class="mono r">13.3%</td>
+<td class="mono r cvs-cell" data-cvs="0.968">+0.97</td>
+<td class="mono r" style="color:var(--emerald)">1.5</td>
+<td><span class="badge access-frontier">Frontier</span></td>
+<td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td></tr>
+<tr>
+<td>8</td><td class="cn">Colombia</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">7.7x</td><td class="mono r">13.0%</td>
+<td class="mono r cvs-cell" data-cvs="0.888">+0.89</td>
+<td class="mono r" style="color:var(--amber2)">4.8</td>
+<td><span class="badge access-open">Open</span></td>
+<td class="mono r" style="color:var(--emerald)">6.4%</td><td class="mono r" style="color:var(--emerald)">+52.6%</td>
+<td class="mono dim">GXG, COLO</td></tr>
+<tr>
+<td>9</td><td class="cn">Egypt</td>
+<td><span class="badge msci-standalone">Standalone</span></td>
+<td class="mono r">7.8x</td><td class="mono r">12.8%</td>
+<td class="mono r cvs-cell" data-cvs="0.855">+0.85</td>
+<td class="mono r" style="color:var(--amber2)">3.2</td>
+<td><span class="badge access-accessible">Accessible</span></td>
+<td class="na">—</td><td class="na">—</td>
+<td class="mono dim">EGPT</td></tr>
+<tr>
+<td>10</td><td class="cn">Bangladesh</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">8.1x</td><td class="mono r">12.3%</td>
+<td class="mono r cvs-cell" data-cvs="0.75">+0.75</td>
+<td class="mono r" style="color:var(--emerald)">1.9</td>
+<td><span class="badge access-frontier">Frontier</span></td>
+<td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td></tr>
+<tr>
+<td>11</td><td class="cn">Tunisia</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">8.4x</td><td class="mono r">11.9%</td>
+<td class="mono r cvs-cell" data-cvs="0.65">+0.65</td>
+<td class="mono r" style="color:var(--amber2)">5.2</td>
+<td><span class="badge access-frontier">Frontier</span></td>
+<td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td></tr>
+<tr>
+<td>12</td><td class="cn">Jordan</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">8.8x</td><td class="mono r">11.4%</td>
+<td class="mono r cvs-cell" data-cvs="0.53">+0.53</td>
+<td class="mono r" style="color:var(--amber2)">3.5</td>
+<td><span class="badge access-frontier">Frontier</span></td>
+<td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td></tr>
+<tr>
+<td>13</td><td class="cn">Romania</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">9.2x</td><td class="mono r">10.9%</td>
+<td class="mono r cvs-cell" data-cvs="0.421">+0.42</td>
+<td class="mono r" style="color:var(--amber2)">9.2</td>
+<td><span class="badge access-frontier">Frontier</span></td>
+<td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td></tr>
+<tr>
+<td>14</td><td class="cn">Serbia</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">9.2x</td><td class="mono r">10.9%</td>
+<td class="mono r cvs-cell" data-cvs="0.421">+0.42</td>
+<td class="mono r" style="color:var(--amber2)">2.3</td>
+<td><span class="badge access-frontier">Frontier</span></td>
+<td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td></tr>
+<tr>
+<td>15</td><td class="cn">Bahrain</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">9.5x</td><td class="mono r">10.5%</td>
+<td class="mono r cvs-cell" data-cvs="0.345">+0.34</td>
+<td class="mono r" style="color:var(--amber2)">3.6</td>
+<td><span class="badge access-frontier">Frontier</span></td>
+<td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td></tr>
+<tr>
+<td>16</td><td class="cn">Vietnam</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">9.7x</td><td class="mono r">10.4%</td>
+<td class="mono r cvs-cell" data-cvs="0.308">+0.31</td>
+<td class="mono r" style="color:var(--emerald)">1.4</td>
+<td><span class="badge access-frontier">Frontier</span></td>
+<td class="mono r" style="color:var(--emerald)">0.2%</td><td class="mono r" style="color:var(--emerald)">+34.4%</td>
+<td class="mono dim">VNM</td></tr>
+<tr>
+<td>17</td><td class="cn">China</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">10.2x</td><td class="mono r">9.8%</td>
+<td class="mono r cvs-cell" data-cvs="0.19">+0.19</td>
+<td class="mono r" style="color:var(--amber2)">2.0</td>
+<td><span class="badge access-open">Open</span></td>
+<td class="mono r" style="color:var(--emerald)">2.1%</td><td class="mono r" style="color:var(--emerald2)">+6.0%</td>
+<td class="mono dim">GXC, MCHI, ASHR</td></tr>
+<tr>
+<td>18</td><td class="cn">Botswana</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">10.2x</td><td class="mono r">9.8%</td>
+<td class="mono r cvs-cell" data-cvs="0.183">+0.18</td>
+<td class="na">—</td>
+<td><span class="badge access-frontier">Frontier</span></td>
+<td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td></tr>
+<tr>
+<td>19</td><td class="cn">Slovenia</td>
+<td><span class="badge msci-frontier">Frontier</span></td>
+<td class="mono r">10.4x</td><td class="mono r">9.6%</td>
+<td class="mono r cvs-cell" data-cvs="0.143">+0.14</td>
+<td class="mono r" style="color:var(--amber2)">6.0</td>
+<td><span class="badge access-frontier">Frontier</span></td>
+<td class="na">—</td><td class="na">—</td>
+<td class="mono dim">—</td></tr>
+<tr>
+<td>20</td><td class="cn">Greece</td>
+<td><span class="badge msci-emerging">Emerging</span></td>
+<td class="mono r">10.5x</td><td class="mono r">9.5%</td>
+<td class="mono r cvs-cell" data-cvs="0.121">+0.12</td>
+<td class="mono r" style="color:var(--amber2)">5.0</td>
+<td><span class="badge access-open">Open</span></td>
+<td class="mono r" style="color:var(--emerald)">0.0%</td><td class="mono r" style="color:var(--emerald)">+40.4%</td>
+<td class="mono dim">GREK</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="section">
+<div class="section-head"><h2>Economic Opportunity Score — Pre-Market &amp; No-Exchange Economies</h2><span class="pill">58 COUNTRIES · WORLD BANK</span></div>
+<p style="color:var(--text2);font-size:.82rem;margin-bottom:20px;max-width:900px">For countries without a stock exchange or without reliable P/E data, we score economic opportunity using <strong style="color:var(--text)">8 World Bank indicators</strong>: GDP Growth (25 pts), FDI/GDP (20 pts), Inflation Stability (15 pts), Population Scale (12 pts), Population Growth (8 pts), Trade Openness (10 pts), Internet Penetration (5 pts), and Savings Rate (5 pts). Score max = 100. This identifies which pre-market economies are most likely to develop investable capital markets next — and where growth is happening before exchanges open.</p>
+<div class="metrics" style="grid-template-columns:repeat(4,1fr)">
+<div class="mc b"><div class="mc-label">Profiled</div><div class="mc-val blue">58</div></div>
+<div class="mc g"><div class="mc-label">High Potential</div><div class="mc-val emerald">1</div></div>
+<div class="mc a"><div class="mc-label">Moderate</div><div class="mc-val amber">16</div></div>
+<div class="mc r2"><div class="mc-label">Developing</div><div class="mc-val" style="color:var(--orange)">25</div></div>
+</div>
+<div class="filters" style="margin-top:16px">
+<select id="fEcon" onchange="fe()"><option value="">All Tiers</option><option>High Potential</option><option>Moderate Potential</option><option>Developing</option><option>Pre-Emerging</option></select>
+<input type="text" id="fEconS" placeholder="Search country…" oninput="fe()">
+</div>
+<div class="tbl-wrap">
+<table id="econTable">
+<thead><tr>
+<th title="Rank by Economic Opportunity Score, highest first.">Rank</th>
+<th>Country</th>
+<th title="ISO 3166-1 alpha-3 country code.">ISO</th>
+<th title="Real GDP growth % — World Bank. Highest EO Score weight (25 pts). Primary indicator of capital market development potential.">GDP Growth</th>
+<th title="GDP per capita in USD — World Bank. Economic development level. Context only — not scored.">GDP / Cap</th>
+<th title="Total population — World Bank. Market size proxy. Scored 1–12 pts by size band, from &lt;1M to &gt;100M.">Population</th>
+<th title="CPI inflation % — World Bank. 15 pts in EO Score. Scoring: ≤3% = 15 pts · ≤6% = 12 · ≤10% = 8 · ≤20% = 4 · &gt;20% = 0 pts.">Inflation</th>
+<th title="Natural resource rents as % of GDP — World Bank. Context only — not scored. High values signal resource-dependency; use to assess whether GDP growth is structural or commodity-driven.">Resrc Rents%</th>
+<th title="Internet users as % of population — World Bank. 5 pts in EO Score. Digital infrastructure is a precondition for modern equity markets.">Internet%</th>
+<th title="Gross national savings as % of GNI — World Bank. 5 pts in EO Score. High savings = domestic pool of investable capital for future equity markets.">Savings%</th>
+<th title="Trade openness = (Exports + Imports) ÷ GDP — World Bank. 10 pts in EO Score. Open economies develop financial markets faster.">Trade / GDP</th>
+<th title="Economic Opportunity Score (0–100). 8-factor World Bank composite identifying pre-market economies most likely to develop investable capital markets. See Methodology below.">EO Score</th>
+<th title="High Potential ≥65 · Moderate Potential 45–65 · Developing 25–45 · Pre-Emerging &lt;25">Tier</th>
+</tr></thead>
+<tbody><tr data-tier="High Potential" data-name="mauritania">
+<td>1</td><td class="cn">Mauritania</td><td class="mono">MRT</td>
+<td class="mono r">6.3%</td>
+<td class="mono r">$2,110</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">2.5%</td>
+<td class="mono r">11.4%</td>
+<td class="mono r">37%</td>
+<td class="mono r">34.4%</td>
+<td class="mono r">94%</td>
+<td class="mono r score-cell">66</td>
+<td><span class="tier-pill econ_high_potential">High Potential</span></td></tr>
+<tr data-tier="Moderate Potential" data-name="kiribati">
+<td>2</td><td class="cn">Kiribati</td><td class="mono">KIR</td>
+<td class="mono r">5.3%</td>
+<td class="mono r">$2,289</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">2.5%</td>
+<td class="mono r">0.0%</td>
+<td class="mono r">88%</td>
+<td class="mono r">29.8%</td>
+<td class="mono r">108%</td>
+<td class="mono r score-cell">56</td>
+<td><span class="tier-pill econ_moderate_potential">Moderate Potential</span></td></tr>
+<tr data-tier="Moderate Potential" data-name="djibouti">
+<td>3</td><td class="cn">Djibouti</td><td class="mono">DJI</td>
+<td class="mono r">7.0%</td>
+<td class="mono r">$3,553</td>
+<td class="mono r">1.2M</td>
+<td class="mono r">2.1%</td>
+<td class="mono r">0.3%</td>
+<td class="mono r">65%</td>
+<td class="mono r">14.9%</td>
+<td class="mono r">241%</td>
+<td class="mono r score-cell">56</td>
+<td><span class="tier-pill econ_moderate_potential">Moderate Potential</span></td></tr>
+<tr data-tier="Moderate Potential" data-name="guinea">
+<td>4</td><td class="cn">Guinea</td><td class="mono">GIN</td>
+<td class="mono r">5.4%</td>
+<td class="mono r">$1,695</td>
+<td class="mono r">14.8M</td>
+<td class="mono r">8.1%</td>
+<td class="mono r">4.5%</td>
+<td class="mono r">27%</td>
+<td class="mono r">9.6%</td>
+<td class="mono r">98%</td>
+<td class="mono r score-cell">55</td>
+<td><span class="tier-pill econ_moderate_potential">Moderate Potential</span></td></tr>
+<tr data-tier="Moderate Potential" data-name="gabon">
+<td>5</td><td class="cn">Gabon</td><td class="mono">GAB</td>
+<td class="mono r">3.4%</td>
+<td class="mono r">$8,230</td>
+<td class="mono r">2.5M</td>
+<td class="mono r">1.2%</td>
+<td class="mono r">18.5%</td>
+<td class="mono r">72%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">92%</td>
+<td class="mono r score-cell">54</td>
+<td><span class="tier-pill econ_moderate_potential">Moderate Potential</span></td></tr>
+<tr data-tier="Moderate Potential" data-name="east timor">
+<td>6</td><td class="cn">East Timor</td><td class="mono">TLS</td>
+<td class="mono r">-9.1%</td>
+<td class="mono r">$1,332</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">2.1%</td>
+<td class="mono r">34.7%</td>
+<td class="mono r">34%</td>
+<td class="mono r">-21.1%</td>
+<td class="mono r">95%</td>
+<td class="mono r score-cell">54</td>
+<td><span class="tier-pill econ_moderate_potential">Moderate Potential</span></td></tr>
+<tr data-tier="Moderate Potential" data-name="gambia">
+<td>7</td><td class="cn">Gambia</td><td class="mono">GMB</td>
+<td class="mono r">5.6%</td>
+<td class="mono r">$871</td>
+<td class="mono r">2.8M</td>
+<td class="mono r">11.6%</td>
+<td class="mono r">2.9%</td>
+<td class="mono r">46%</td>
+<td class="mono r">25.9%</td>
+<td class="mono r">42%</td>
+<td class="mono r score-cell">53</td>
+<td><span class="tier-pill econ_moderate_potential">Moderate Potential</span></td></tr>
+<tr data-tier="Moderate Potential" data-name="antigua and barbuda">
+<td>8</td><td class="cn">Antigua and Barbuda</td><td class="mono">ATG</td>
+<td class="mono r">3.7%</td>
+<td class="mono r">$23,542</td>
+<td class="mono r">93k</td>
+<td class="mono r">6.2%</td>
+<td class="mono r">0.0%</td>
+<td class="mono r">78%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">118%</td>
+<td class="mono r score-cell">53</td>
+<td><span class="tier-pill econ_moderate_potential">Moderate Potential</span></td></tr>
+<tr data-tier="Moderate Potential" data-name="congo (republic)">
+<td>9</td><td class="cn">Congo (Republic)</td><td class="mono">COG</td>
+<td class="mono r">2.6%</td>
+<td class="mono r">$2,482</td>
+<td class="mono r">6.3M</td>
+<td class="mono r">3.1%</td>
+<td class="mono r">37.7%</td>
+<td class="mono r">38%</td>
+<td class="mono r">31.7%</td>
+<td class="mono r">93%</td>
+<td class="mono r score-cell">52</td>
+<td><span class="tier-pill econ_moderate_potential">Moderate Potential</span></td></tr>
+<tr data-tier="Moderate Potential" data-name="belize">
+<td>10</td><td class="cn">Belize</td><td class="mono">BLZ</td>
+<td class="mono r">3.5%</td>
+<td class="mono r">$7,681</td>
+<td class="mono r">417k</td>
+<td class="mono r">3.3%</td>
+<td class="mono r">0.5%</td>
+<td class="mono r">72%</td>
+<td class="mono r">20.8%</td>
+<td class="mono r">109%</td>
+<td class="mono r score-cell">52</td>
+<td><span class="tier-pill econ_moderate_potential">Moderate Potential</span></td></tr>
+<tr data-tier="Moderate Potential" data-name="brunei">
+<td>11</td><td class="cn">Brunei</td><td class="mono">BRN</td>
+<td class="mono r">4.1%</td>
+<td class="mono r">$33,153</td>
+<td class="mono r">462k</td>
+<td class="mono r">-0.4%</td>
+<td class="mono r">24.3%</td>
+<td class="mono r">99%</td>
+<td class="mono r">47.7%</td>
+<td class="mono r">133%</td>
+<td class="mono r score-cell">51</td>
+<td><span class="tier-pill econ_moderate_potential">Moderate Potential</span></td></tr>
+<tr data-tier="Moderate Potential" data-name="congo (drc)">
+<td>12</td><td class="cn">Congo (DRC)</td><td class="mono">COD</td>
+<td class="mono r">6.1%</td>
+<td class="mono r">$649</td>
+<td class="mono r">109.3M</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">38.8%</td>
+<td class="mono r">31%</td>
+<td class="mono r">28.3%</td>
+<td class="mono r">101%</td>
+<td class="mono r score-cell">51</td>
+<td><span class="tier-pill econ_moderate_potential">Moderate Potential</span></td></tr>
+<tr data-tier="Moderate Potential" data-name="aruba">
+<td>13</td><td class="cn">Aruba</td><td class="mono">ABW</td>
+<td class="mono r">6.8%</td>
+<td class="mono r">$39,499</td>
+<td class="mono r">107k</td>
+<td class="mono r">4.3%</td>
+<td class="mono r">0.0%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">19.6%</td>
+<td class="mono r">160%</td>
+<td class="mono r score-cell">50</td>
+<td><span class="tier-pill econ_moderate_potential">Moderate Potential</span></td></tr>
+<tr data-tier="Moderate Potential" data-name="grenada">
+<td>14</td><td class="cn">Grenada</td><td class="mono">GRD</td>
+<td class="mono r">4.0%</td>
+<td class="mono r">$11,705</td>
+<td class="mono r">117k</td>
+<td class="mono r">1.1%</td>
+<td class="mono r">0.0%</td>
+<td class="mono r">74%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r score-cell">50</td>
+<td><span class="tier-pill econ_moderate_potential">Moderate Potential</span></td></tr>
+<tr data-tier="Moderate Potential" data-name="palau">
+<td>15</td><td class="cn">Palau</td><td class="mono">PLW</td>
+<td class="mono r">2.2%</td>
+<td class="mono r">$15,611</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">2.2%</td>
+<td class="mono r">0.0%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">-12.7%</td>
+<td class="mono r">107%</td>
+<td class="mono r score-cell">50</td>
+<td><span class="tier-pill econ_moderate_potential">Moderate Potential</span></td></tr>
+<tr data-tier="Moderate Potential" data-name="algeria">
+<td>16</td><td class="cn">Algeria</td><td class="mono">DZA</td>
+<td class="mono r">3.7%</td>
+<td class="mono r">$5,753</td>
+<td class="mono r">46.8M</td>
+<td class="mono r">4.0%</td>
+<td class="mono r">22.6%</td>
+<td class="mono r">77%</td>
+<td class="mono r">39.4%</td>
+<td class="mono r">40%</td>
+<td class="mono r score-cell">48</td>
+<td><span class="tier-pill econ_moderate_potential">Moderate Potential</span></td></tr>
+<tr data-tier="Moderate Potential" data-name="samoa">
+<td>17</td><td class="cn">Samoa</td><td class="mono">WSM</td>
+<td class="mono r">4.7%</td>
+<td class="mono r">$5,393</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">2.2%</td>
+<td class="mono r">0.3%</td>
+<td class="mono r">58%</td>
+<td class="mono r">30.0%</td>
+<td class="mono r">80%</td>
+<td class="mono r score-cell">47</td>
+<td><span class="tier-pill econ_moderate_potential">Moderate Potential</span></td></tr>
+<tr data-tier="Developing" data-name="liberia">
+<td>18</td><td class="cn">Liberia</td><td class="mono">LBR</td>
+<td class="mono r">4.0%</td>
+<td class="mono r">$851</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">8.2%</td>
+<td class="mono r">21.9%</td>
+<td class="mono r">23%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r score-cell">44</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="saint lucia">
+<td>19</td><td class="cn">Saint Lucia</td><td class="mono">LCA</td>
+<td class="mono r">3.9%</td>
+<td class="mono r">$14,182</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">-0.1%</td>
+<td class="mono r">0.0%</td>
+<td class="mono r">70%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r score-cell">44</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="saint vincent & grenadines">
+<td>20</td><td class="cn">Saint Vincent & Grenadines</td><td class="mono">VCT</td>
+<td class="mono r">4.1%</td>
+<td class="mono r">$11,501</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">3.6%</td>
+<td class="mono r">0.0%</td>
+<td class="mono r">76%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r score-cell">44</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="slovak republic">
+<td>21</td><td class="cn">Slovak Republic</td><td class="mono">SVK</td>
+<td class="mono r">1.9%</td>
+<td class="mono r">$25,993</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">2.8%</td>
+<td class="mono r">0.2%</td>
+<td class="mono r">90%</td>
+<td class="mono r">15.9%</td>
+<td class="mono r">171%</td>
+<td class="mono r score-cell">44</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="chad">
+<td>22</td><td class="cn">Chad</td><td class="mono">TCD</td>
+<td class="mono r">4.2%</td>
+<td class="mono r">$962</td>
+<td class="mono r">20.3M</td>
+<td class="mono r">8.9%</td>
+<td class="mono r">21.3%</td>
+<td class="mono r">13%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">48%</td>
+<td class="mono r score-cell">43</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="dominica">
+<td>23</td><td class="cn">Dominica</td><td class="mono">DMA</td>
+<td class="mono r">2.1%</td>
+<td class="mono r">$10,405</td>
+<td class="mono r">66k</td>
+<td class="mono r">2.6%</td>
+<td class="mono r">0.0%</td>
+<td class="mono r">84%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r score-cell">42</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="solomon islands">
+<td>24</td><td class="cn">Solomon Islands</td><td class="mono">SLB</td>
+<td class="mono r">3.0%</td>
+<td class="mono r">$1,934</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">4.3%</td>
+<td class="mono r">18.4%</td>
+<td class="mono r">42%</td>
+<td class="mono r">1.2%</td>
+<td class="mono r">111%</td>
+<td class="mono r score-cell">42</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="cameroon">
+<td>25</td><td class="cn">Cameroon</td><td class="mono">CMR</td>
+<td class="mono r">3.5%</td>
+<td class="mono r">$1,830</td>
+<td class="mono r">29.1M</td>
+<td class="mono r">4.5%</td>
+<td class="mono r">5.5%</td>
+<td class="mono r">42%</td>
+<td class="mono r">14.9%</td>
+<td class="mono r">34%</td>
+<td class="mono r score-cell">41</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="curacao">
+<td>26</td><td class="cn">Curacao</td><td class="mono">CUW</td>
+<td class="mono r">5.0%</td>
+<td class="mono r">$22,833</td>
+<td class="mono r">155k</td>
+<td class="mono r">2.6%</td>
+<td class="mono r">0.0%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r score-cell">41</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="madagascar">
+<td>27</td><td class="cn">Madagascar</td><td class="mono">MDG</td>
+<td class="mono r">4.2%</td>
+<td class="mono r">$545</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">9.9%</td>
+<td class="mono r">5.5%</td>
+<td class="mono r">20%</td>
+<td class="mono r">16.4%</td>
+<td class="mono r">55%</td>
+<td class="mono r score-cell">39</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="san marino">
+<td>28</td><td class="cn">San Marino</td><td class="mono">SMR</td>
+<td class="mono r">0.4%</td>
+<td class="mono r">$59,880</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">1.2%</td>
+<td class="mono r">0.0%</td>
+<td class="mono r">87%</td>
+<td class="mono r">38.6%</td>
+<td class="mono r">341%</td>
+<td class="mono r score-cell">39</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="afghanistan">
+<td>29</td><td class="cn">Afghanistan</td><td class="mono">AFG</td>
+<td class="mono r">2.3%</td>
+<td class="mono r">$414</td>
+<td class="mono r">42.6M</td>
+<td class="mono r">-6.6%</td>
+<td class="mono r">0.4%</td>
+<td class="mono r">18%</td>
+<td class="mono r">-2.7%</td>
+<td class="mono r">68%</td>
+<td class="mono r score-cell">39</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="equatorial guinea">
+<td>30</td><td class="cn">Equatorial Guinea</td><td class="mono">GNQ</td>
+<td class="mono r">0.9%</td>
+<td class="mono r">$6,745</td>
+<td class="mono r">1.9M</td>
+<td class="mono r">2.9%</td>
+<td class="mono r">23.5%</td>
+<td class="mono r">60%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">61%</td>
+<td class="mono r score-cell">38</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="lesotho">
+<td>31</td><td class="cn">Lesotho</td><td class="mono">LSO</td>
+<td class="mono r">2.9%</td>
+<td class="mono r">$972</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">6.1%</td>
+<td class="mono r">4.3%</td>
+<td class="mono r">48%</td>
+<td class="mono r">19.9%</td>
+<td class="mono r">142%</td>
+<td class="mono r score-cell">36</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="comoros">
+<td>32</td><td class="cn">Comoros</td><td class="mono">COM</td>
+<td class="mono r">3.3%</td>
+<td class="mono r">$1,663</td>
+<td class="mono r">866k</td>
+<td class="mono r">5.1%</td>
+<td class="mono r">1.6%</td>
+<td class="mono r">36%</td>
+<td class="mono r">11.7%</td>
+<td class="mono r">44%</td>
+<td class="mono r score-cell">36</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="northern mariana islands">
+<td>33</td><td class="cn">Northern Mariana Islands</td><td class="mono">MNP</td>
+<td class="mono r">16.6%</td>
+<td class="mono r">$23,786</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">0.0%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">93%</td>
+<td class="mono r score-cell">35</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="somalia, fed. rep.">
+<td>34</td><td class="cn">Somalia, Fed. Rep.</td><td class="mono">SOM</td>
+<td class="mono r">4.1%</td>
+<td class="mono r">$630</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">11.2%</td>
+<td class="mono r">28%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">130%</td>
+<td class="mono r score-cell">35</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="central african republic">
+<td>35</td><td class="cn">Central African Republic</td><td class="mono">CAF</td>
+<td class="mono r">1.5%</td>
+<td class="mono r">$516</td>
+<td class="mono r">5.3M</td>
+<td class="mono r">1.5%</td>
+<td class="mono r">10.3%</td>
+<td class="mono r">8%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">46%</td>
+<td class="mono r score-cell">34</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="andorra">
+<td>36</td><td class="cn">Andorra</td><td class="mono">AND</td>
+<td class="mono r">3.4%</td>
+<td class="mono r">$49,304</td>
+<td class="mono r">81k</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">0.0%</td>
+<td class="mono r">95%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r score-cell">33</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="vanuatu">
+<td>37</td><td class="cn">Vanuatu</td><td class="mono">VUT</td>
+<td class="mono r">0.9%</td>
+<td class="mono r">$3,411</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">11.2%</td>
+<td class="mono r">0.6%</td>
+<td class="mono r">46%</td>
+<td class="mono r">27.5%</td>
+<td class="mono r">64%</td>
+<td class="mono r score-cell">32</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="tonga">
+<td>38</td><td class="cn">Tonga</td><td class="mono">TON</td>
+<td class="mono r">2.8%</td>
+<td class="mono r">$5,652</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">3.2%</td>
+<td class="mono r">0.0%</td>
+<td class="mono r">59%</td>
+<td class="mono r">18.6%</td>
+<td class="mono r">80%</td>
+<td class="mono r score-cell">32</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="micronesia">
+<td>39</td><td class="cn">Micronesia</td><td class="mono">FSM</td>
+<td class="mono r">0.7%</td>
+<td class="mono r">$4,166</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">5.4%</td>
+<td class="mono r">0.0%</td>
+<td class="mono r">39%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">98%</td>
+<td class="mono r score-cell">29</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="saint kitts & nevis">
+<td>40</td><td class="cn">Saint Kitts & Nevis</td><td class="mono">KNA</td>
+<td class="mono r">0.3%</td>
+<td class="mono r">$23,961</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">3.6%</td>
+<td class="mono r">0.0%</td>
+<td class="mono r">76%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r score-cell">28</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="turkmenistan">
+<td>41</td><td class="cn">Turkmenistan</td><td class="mono">TKM</td>
+<td class="mono r">6.3%</td>
+<td class="mono r">$6,857</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">13.5%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">29%</td>
+<td class="mono r score-cell">28</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Developing" data-name="sierra leone">
+<td>42</td><td class="cn">Sierra Leone</td><td class="mono">SLE</td>
+<td class="mono r">4.3%</td>
+<td class="mono r">$807</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">28.6%</td>
+<td class="mono r">9.0%</td>
+<td class="mono r">21%</td>
+<td class="mono r">10.6%</td>
+<td class="mono r">41%</td>
+<td class="mono r score-cell">26</td>
+<td><span class="tier-pill econ_developing">Developing</span></td></tr>
+<tr data-tier="Pre-Emerging" data-name="burundi">
+<td>43</td><td class="cn">Burundi</td><td class="mono">BDI</td>
+<td class="mono r">4.1%</td>
+<td class="mono r">$219</td>
+<td class="mono r">14.0M</td>
+<td class="mono r">20.2%</td>
+<td class="mono r">14.0%</td>
+<td class="mono r">11%</td>
+<td class="mono r">31.4%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r score-cell">25</td>
+<td><span class="tier-pill econ_pre-emerging">Pre-Emerging</span></td></tr>
+<tr data-tier="Pre-Emerging" data-name="nauru">
+<td>44</td><td class="cn">Nauru</td><td class="mono">NRU</td>
+<td class="mono r">1.4%</td>
+<td class="mono r">$13,609</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">0.0%</td>
+<td class="mono r">82%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">166%</td>
+<td class="mono r score-cell">24</td>
+<td><span class="tier-pill econ_pre-emerging">Pre-Emerging</span></td></tr>
+<tr data-tier="Pre-Emerging" data-name="turks and caicos islands">
+<td>45</td><td class="cn">Turks and Caicos Islands</td><td class="mono">TCA</td>
+<td class="mono r">5.6%</td>
+<td class="mono r">$37,507</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">0.0%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r score-cell">22</td>
+<td><span class="tier-pill econ_pre-emerging">Pre-Emerging</span></td></tr>
+<tr data-tier="Pre-Emerging" data-name="marshall islands">
+<td>46</td><td class="cn">Marshall Islands</td><td class="mono">MHL</td>
+<td class="mono r">2.5%</td>
+<td class="mono r">$7,726</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">0.0%</td>
+<td class="mono r">66%</td>
+<td class="mono r">11.5%</td>
+<td class="mono r">124%</td>
+<td class="mono r score-cell">22</td>
+<td><span class="tier-pill econ_pre-emerging">Pre-Emerging</span></td></tr>
+<tr data-tier="Pre-Emerging" data-name="cuba">
+<td>47</td><td class="cn">Cuba</td><td class="mono">CUB</td>
+<td class="mono r">-1.1%</td>
+<td class="mono r">$9,605</td>
+<td class="mono r">11.0M</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">0.6%</td>
+<td class="mono r">71%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">125%</td>
+<td class="mono r score-cell">21</td>
+<td><span class="tier-pill econ_pre-emerging">Pre-Emerging</span></td></tr>
+<tr data-tier="Pre-Emerging" data-name="monaco">
+<td>48</td><td class="cn">Monaco</td><td class="mono">MCO</td>
+<td class="mono r">8.5%</td>
+<td class="mono r">$288,001</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">0.0%</td>
+<td class="mono r">99%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r score-cell">20</td>
+<td><span class="tier-pill econ_pre-emerging">Pre-Emerging</span></td></tr>
+<tr data-tier="Pre-Emerging" data-name="haiti">
+<td>49</td><td class="cn">Haiti</td><td class="mono">HTI</td>
+<td class="mono r">-4.2%</td>
+<td class="mono r">$2,143</td>
+<td class="mono r">11.8M</td>
+<td class="mono r">26.9%</td>
+<td class="mono r">0.3%</td>
+<td class="mono r">39%</td>
+<td class="mono r">9.5%</td>
+<td class="mono r">22%</td>
+<td class="mono r score-cell">20</td>
+<td><span class="tier-pill econ_pre-emerging">Pre-Emerging</span></td></tr>
+<tr data-tier="Pre-Emerging" data-name="suriname">
+<td>50</td><td class="cn">Suriname</td><td class="mono">SUR</td>
+<td class="mono r">1.7%</td>
+<td class="mono r">$6,962</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">16.2%</td>
+<td class="mono r">9.6%</td>
+<td class="mono r">78%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r score-cell">19</td>
+<td><span class="tier-pill econ_pre-emerging">Pre-Emerging</span></td></tr>
+<tr data-tier="Pre-Emerging" data-name="venezuela">
+<td>51</td><td class="cn">Venezuela</td><td class="mono">VEN</td>
+<td class="mono r">5.3%</td>
+<td class="mono r">$4,218</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">26%</td>
+<td class="mono r score-cell">18</td>
+<td><span class="tier-pill econ_pre-emerging">Pre-Emerging</span></td></tr>
+<tr data-tier="Pre-Emerging" data-name="sint maarten (dutch part)">
+<td>52</td><td class="cn">Sint Maarten (Dutch part)</td><td class="mono">SXM</td>
+<td class="mono r">3.0%</td>
+<td class="mono r">$41,473</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r score-cell">17</td>
+<td><span class="tier-pill econ_pre-emerging">Pre-Emerging</span></td></tr>
+<tr data-tier="Pre-Emerging" data-name="sao tome and principe">
+<td>53</td><td class="cn">Sao Tome and Principe</td><td class="mono">STP</td>
+<td class="mono r">1.1%</td>
+<td class="mono r">$3,491</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">14.4%</td>
+<td class="mono r">1.9%</td>
+<td class="mono r">61%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r score-cell">17</td>
+<td><span class="tier-pill econ_pre-emerging">Pre-Emerging</span></td></tr>
+<tr data-tier="Pre-Emerging" data-name="american samoa">
+<td>54</td><td class="cn">American Samoa</td><td class="mono">ASM</td>
+<td class="mono r">1.7%</td>
+<td class="mono r">$18,017</td>
+<td class="mono r">46k</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">0.0%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">125%</td>
+<td class="mono r score-cell">15</td>
+<td><span class="tier-pill econ_pre-emerging">Pre-Emerging</span></td></tr>
+<tr data-tier="Pre-Emerging" data-name="syria">
+<td>55</td><td class="cn">Syria</td><td class="mono">SYR</td>
+<td class="mono r">0.7%</td>
+<td class="mono r">$1,052</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">13.4%</td>
+<td class="mono r">6.4%</td>
+<td class="mono r">35%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">36%</td>
+<td class="mono r score-cell">14</td>
+<td><span class="tier-pill econ_pre-emerging">Pre-Emerging</span></td></tr>
+<tr data-tier="Pre-Emerging" data-name="tuvalu">
+<td>56</td><td class="cn">Tuvalu</td><td class="mono">TUV</td>
+<td class="mono r">3.9%</td>
+<td class="mono r">$6,345</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">0.0%</td>
+<td class="mono r">74%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r score-cell">12</td>
+<td><span class="tier-pill econ_pre-emerging">Pre-Emerging</span></td></tr>
+<tr data-tier="Pre-Emerging" data-name="eritrea">
+<td>57</td><td class="cn">Eritrea</td><td class="mono">ERI</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">3.5M</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">20%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r score-cell">11</td>
+<td><span class="tier-pill econ_pre-emerging">Pre-Emerging</span></td></tr>
+<tr data-tier="Pre-Emerging" data-name="south sudan">
+<td>58</td><td class="cn">South Sudan</td><td class="mono">SSD</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">91.4%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r">9%</td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r"><span class="na">—</span></td>
+<td class="mono r score-cell">4</td>
+<td><span class="tier-pill econ_pre-emerging">Pre-Emerging</span></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="noexch">
+<h3>Countries With No Stock Exchange (51)</h3>
+<p>Afghanistan, Andorra, Antigua and Barbuda, Belize, Brunei, Burundi, Central African Republic, Chad, Comoros, Congo (DRC), Congo (Republic), Cuba, Djibouti, Dominica, East Timor, Equatorial Guinea, Eritrea, Gabon, Gambia, Grenada, Guinea, Haiti, Kiribati, Lesotho, Liberia, Liechtenstein, Madagascar, Marshall Islands, Mauritania, Micronesia, Monaco, Nauru, North Korea, Palau, Samoa, San Marino, Sao Tome and Principe, Sierra Leone, Solomon Islands, Somalia, South Sudan, St. Kitts and Nevis, St. Lucia, St. Vincent and the Grenadines, Suriname, Tonga, Turkmenistan, Tuvalu, Vanuatu, Vatican City, Yemen</p>
+</div>
+
+<div class="prov">
+<h2>Methodology & Data Provenance</h2>
+
+<div class="meth-section">
+<h3>How to Use This Dashboard</h3>
+<p>This tool narrows the global opportunity set to markets worth deeper investigation. The workflow: (1) use CVS and Access tier to identify statistically cheap, internationally accessible markets; (2) layer in GDP Growth and PEG-Lite to assess whether cheapness comes with genuine economic momentum; (3) check the Source column and data confidence tier before citing any figure externally; (4) apply standard due diligence — geopolitical risk, currency regime, liquidity, and sector composition are not captured here. Column headers are hoverable for per-metric context.</p>
+<p style="color:var(--red2)"><strong>Critical caveat:</strong> Low P/E ≠ investable. Russia and Lebanon rank near the top by CVS but are effectively uninvestable (sanctions, active conflict). CVS is a statistical filter, not a risk-adjusted recommendation. Always layer with Access tier and source quality before acting on any signal.</p>
+</div>
+
+<div class="meth-section">
+<h3>Composite Value Score (CVS)</h3>
+<p><strong>Definition:</strong> CVS = z-score of Earnings Yield (1 ÷ P/E) across all 94 scored markets at the time of the build. It answers: "How cheap is this market relative to the global cross-section?"</p>
+<p><strong>Interpretation guide:</strong> CVS +2.0 = earnings yield 2 standard deviations above the global mean — extreme statistical cheapness. CVS +1.0 = 1σ above mean (Deep Value threshold). CVS 0 = globally average. CVS −1.0 = 1σ below mean (Expensive). CVS −2.0 = very expensive relative to global peers.</p>
+<p><strong>Why z-score earnings yield?</strong> Raw P/E is hard to compare across markets with different sector compositions (resource-heavy markets structurally trade at lower P/Es than tech-heavy ones) and accounting standards. Z-scoring the earnings yield normalizes for the cross-sectional distribution at a point in time, making relative cheapness directly comparable regardless of absolute P/E levels.</p>
+<p><strong>What CVS does not capture:</strong> Political and sanctions risk · Currency convertibility and devaluation risk · Market liquidity and repatriation friction · Accounting standard differences (IFRS vs. local GAAP) · Data quality variance across sources · Sector composition differences. A market can have CVS +3.0 and still be functionally uninvestable.</p>
+</div>
+
+<div class="meth-section">
+<h3>Earnings Yield (EY%)</h3>
+<p>EY% = (1 ÷ P/E) × 100. The inverse of P/E — the equity market's analogue to a bond yield. At 8x P/E, the earnings yield is 12.5%; at 25x P/E, 4.0%. Useful for equity risk premium analysis: compare EY against local 10-year government bond yields to assess whether equities compensate for additional risk in that market. EY is the raw input to CVS before z-scoring.</p>
+</div>
+
+<div class="meth-section">
+<h3>PEG-Lite</h3>
+<p><strong>Definition:</strong> PEG-Lite = P/E ÷ max(GDP Growth %, 1.0). Adapts the classic PEG ratio to country-level analysis. A market at 10x P/E growing at 7% GDP has PEG-Lite = 1.4x — cheap relative to growth. Values &lt; 2.0x highlighted green; ≥ 2.0x amber. Shown in the Best Investable table only.</p>
+<p><strong>Why GDP growth, not EPS growth?</strong> Country-level forward earnings growth data is unavailable for most markets. GDP growth is the best available proxy for aggregate corporate earnings expansion potential over a cycle, particularly in markets where financials and consumer staples dominate the index.</p>
+<p><strong>Limitation:</strong> GDP growth from World Bank data, typically 1–2 years lagged. A market undergoing rapid recent growth may show a higher PEG-Lite than current conditions warrant. Treat as directional, not precise.</p>
+</div>
+
+<div class="meth-section">
+<h3>Economic Opportunity Score (0–100)</h3>
+<p>Scores ~58 countries without publicly available P/E data using 8 World Bank indicators. The question it answers: <em>Which pre-market or illiquid economies have the structural conditions most likely to produce investable capital markets — and where is growth happening before exchanges open?</em></p>
+<table class="meth-table">
+<thead><tr><th>Factor</th><th>Max Pts</th><th>Why This Factor, Why This Weight</th></tr></thead>
+<tbody>
+<tr><td>GDP Growth</td><td>25</td><td>Highest weight. Raw growth is the primary signal for emerging capital market development. High-growth economies attract FDI, expand the corporate sector, and develop market infrastructure. Capped at 15% to reduce distortion from one-off commodity or post-war rebounds.</td></tr>
+<tr><td>FDI / GDP</td><td>20</td><td>FDI inflows as % of GDP. When sophisticated foreign investors commit capital to a country, it validates the risk/return profile in a way that GDP alone cannot. FDI inflows are the strongest leading indicator of future exchange development — capital markets tend to formalize after foreign capital begins flowing in at scale.</td></tr>
+<tr><td>Inflation Stability</td><td>15</td><td>Chronic high inflation destroys real returns, undermines the unit of account, and makes equity market formation nearly impossible (investors cannot price assets in a depreciating currency). Functions as a partial qualifier: ≤3% = 15 pts, stepwise to 0 pts above 20% CPI.</td></tr>
+<tr><td>Population Scale</td><td>12</td><td>Market size proxy. Large domestic consumer bases generate the corporate ecosystem — retail, banking, telecom, consumer goods — that eventually lists on exchanges. Graduated from 1 pt (&lt;1M) to 12 pts (&gt;100M).</td></tr>
+<tr><td>Trade Openness</td><td>10</td><td>(Exports + Imports) / GDP. Open economies develop financial services faster, face stronger corporate governance pressure from international counterparties, and historically develop deeper capital markets sooner than closed peers.</td></tr>
+<tr><td>Population Growth</td><td>8</td><td>Demographic dividend proxy. Sweet spot: 0.5%–2.5% annual growth signals working-age population expansion, which drives consumer demand and labor supply. Near-zero or negative = demographic decline; &gt;2.5% = development challenged by dependency ratios.</td></tr>
+<tr><td>Internet Penetration</td><td>5</td><td>Digital infrastructure is a precondition for modern equity markets: retail brokerage, mobile banking, electronic trading, and price discovery all require internet access. Countries above 80% penetration score full points.</td></tr>
+<tr><td>Savings Rate</td><td>5</td><td>Gross national savings as % of GNI. High domestic savings = a domestic pool of investable capital. Countries that develop equity markets need local institutional investors (pension funds, insurers) as a buyer base — which requires a savings culture. Countries above 30% score full points.</td></tr>
+</tbody>
+</table>
+<p style="margin-top:8px;color:var(--text3)">Requires ≥ 3 factors to produce a score. FDI/GDP requires both FDI and GDP total data. World Bank data typically lags 1–2 years. Note: this score intentionally excludes rule-of-law, corruption, and contract enforcement — important factors that lack consistent cross-country quantification in the World Bank dataset.</p>
+</div>
+
+<div class="meth-section">
+<h3>Access Tiers</h3>
+<ul>
+<li><strong style="color:var(--emerald)">Open</strong> — MSCI Developed or Emerging Market. Full institutional access; deep ETF and ADR ecosystem; high liquidity. No friction for long-only international investors.</li>
+<li><strong style="color:var(--cyan)">Frontier</strong> — MSCI Frontier Market. Accessible to international investors but lower liquidity, higher transaction costs, and limited ETF options. Position sizing must account for exit friction.</li>
+<li><strong style="color:var(--blue2)">Accessible</strong> — Non-MSCI market with a listed country ETF or major fund vehicle available to international investors. Investable with a vehicle, though the vehicle may have tracking error or thin liquidity itself.</li>
+<li><strong style="color:var(--text2)">Restricted</strong> — Non-MSCI with no accessible ETF or listed fund vehicle. Exchange exists and operates; direct international access requires local broker and custodian relationships. Investable in principle, operationally difficult.</li>
+<li><strong style="color:var(--amber2)">Controlled</strong> — Capital controls, banking restrictions, or active financial crisis restricting international capital flow. Current examples: Lebanon (banking collapse), Ukraine (wartime controls), Argentina (multi-year capital controls), Myanmar (military sanctions), Zimbabwe (currency/access restrictions). CVS shown for monitoring purposes.</li>
+<li><strong style="color:var(--red2)">Inaccessible</strong> — De facto closed to international investors: active OFAC/UN sanctions or conflict-closed markets. Current examples: Russia, Belarus, Iran, Syria, Libya, Sudan, Venezuela, North Korea. CVS shown for analytical context only — not for investment action.</li>
+</ul>
+<p style="margin-top:8px;color:var(--text3)">The <strong>Best Investable Opportunities</strong> section above excludes Controlled and Inaccessible markets, showing only Open + Frontier + Accessible markets.</p>
+</div>
+
+<div class="meth-section">
+<h3>Data Sources & Confidence Tiers</h3>
+<p><strong>Zero hallucinated P/E data.</strong> Every figure traces to a cited source in the Source column. Confidence tiers, highest to lowest:</p>
+<ul>
+<li><strong>MSCI TTM (Float-adj)</strong> — Highest confidence. Trailing 12-month P/E from official MSCI country index factsheets. Float-adjusted, reconstituted quarterly. Covers all MSCI Developed, Emerging, and Frontier markets.</li>
+<li><strong>WFE Statistics</strong> — High confidence. World Federation of Exchanges quarterly market statistics reports, sourced directly from member exchanges.</li>
+<li><strong>AFC / Fund Portfolio (AFC, East Capital, Tundra, Rabee)</strong> — Medium confidence. Weighted harmonic average trailing P/E from Asia Frontier Capital, East Capital, Tundra Fonder, and Rabee Securities fund factsheets. Covers frontier markets not in MSCI (Vietnam, Uzbekistan, Iraq, and others). Fund P/E reflects portfolio holdings, not full-market coverage.</li>
+<li><strong>Cedar Capital / Specialist Fund Report</strong> — Medium confidence. Frontier and African market specialist fund quarterly reports. Currently used for Malawi (42.6x, Q3-2025). Authoritative for covered markets; review dates may lag current conditions by 1–2 quarters.</li>
+<li><strong>Local Index / Exchange Estimate</strong> — Lower confidence. P/E derived from local exchange publications, Bloomberg terminals, or analyst estimates. Use as directional signal; verify before citing externally.</li>
+<li><strong style="color:var(--amber2)">SimplyWall.st / Retail Aggregator (Estimated)</strong> — Lowest confidence. Aggregated from stock-level data by a retail analytics platform; not a primary exchange source. Currently used for Namibia (6.6x, NSX) and Malta (10.5x, MSE). <em>Verify against NSX annual statistics / MSE market report before citing in investment memos or client materials.</em></li>
+<li><strong>No Data</strong> — Exchange exists but no reliable composite P/E published by the exchange, MSCI, or any fund covering the market. pe_src field explains the specific reason. Shown for universe completeness.</li>
+</ul>
+</div>
+
+<div class="meth-section">
+<h3>ETF Data & World Bank Data Notes</h3>
+<p><strong>ETF data</strong> (Div Yield, 1yr ETF return): fetched live via yfinance at build time. Reflects the primary country ETF's trailing dividend yield and 1-year total return in USD. Caveats: (1) ETF return ≠ local index return due to currency moves, management fees, and tracking differences; (2) NGE (Nigeria) and EGPT (Egypt) show null due to thin liquidity or near-delisting — treat those rows as Restricted for practical purposes; (3) ARGT (Argentina) data patched due to API rate limits.</p>
+<p><strong>World Bank data</strong>: fetched from the World Bank open API, covering 58 countries across 15 indicators. Data is typically 1–2 years lagged (most recent full-year available). Population data may show gaps in this build due to API availability at fetch time. Build date: March 13, 2026 · 18:55 ET.</p>
+<p style="color:var(--text3);margin-top:8px"><strong>Full coverage:</strong> 94 markets with P/E data · 58 economic profiles (World Bank) · 51 countries with no exchange · Sources: MSCI, WFE, AFC, East Capital, Tundra Fonder, Cedar Capital, World Bank API, yfinance, primary exchange data</p>
+</div>
+
+</div>
+</div>
+
+<script>
+const BD=[{"n": "Lebanon", "pe": 4.1, "cvs": 3.426, "t": "Deep Value"}, {"n": "Russia", "pe": 4.2, "cvs": 3.297, "t": "Deep Value"}, {"n": "Kazakhstan", "pe": 4.3, "cvs": 3.175, "t": "Deep Value"}, {"n": "Uzbekistan", "pe": 5.26, "cvs": 2.23, "t": "Deep Value"}, {"n": "Kenya", "pe": 5.3, "cvs": 2.199, "t": "Deep Value"}, {"n": "Nigeria", "pe": 5.5, "cvs": 2.046, "t": "Deep Value"}, {"n": "Zambia", "pe": 5.8, "cvs": 1.837, "t": "Deep Value"}, {"n": "Pakistan", "pe": 6.0, "cvs": 1.71, "t": "Deep Value"}, {"n": "Ghana", "pe": 6.2, "cvs": 1.59, "t": "Deep Value"}, {"n": "Iraq", "pe": 6.5, "cvs": 1.424, "t": "Deep Value"}, {"n": "Namibia", "pe": 6.6, "cvs": 1.372, "t": "Deep Value"}, {"n": "Tanzania", "pe": 7.4, "cvs": 1.008, "t": "Deep Value"}, {"n": "Sri Lanka", "pe": 7.5, "cvs": 0.968, "t": "Value"}, {"n": "Colombia", "pe": 7.71, "cvs": 0.888, "t": "Value"}, {"n": "Egypt", "pe": 7.8, "cvs": 0.855, "t": "Value"}, {"n": "Bangladesh", "pe": 8.1, "cvs": 0.75, "t": "Value"}, {"n": "Palestine", "pe": 8.2, "cvs": 0.717, "t": "Value"}, {"n": "Tunisia", "pe": 8.4, "cvs": 0.65, "t": "Value"}, {"n": "Laos", "pe": 8.5, "cvs": 0.619, "t": "Value"}, {"n": "Jordan", "pe": 8.8, "cvs": 0.53, "t": "Value"}, {"n": "Rwanda", "pe": 9.1, "cvs": 0.448, "t": "Value"}, {"n": "Romania", "pe": 9.2, "cvs": 0.421, "t": "Value"}, {"n": "Serbia", "pe": 9.2, "cvs": 0.421, "t": "Value"}, {"n": "Bahrain", "pe": 9.5, "cvs": 0.345, "t": "Value"}, {"n": "Mongolia", "pe": 9.5, "cvs": 0.345, "t": "Value"}, {"n": "Vietnam", "pe": 9.65, "cvs": 0.308, "t": "Value"}, {"n": "China", "pe": 10.17, "cvs": 0.19, "t": "Fair Value"}, {"n": "Botswana", "pe": 10.2, "cvs": 0.183, "t": "Fair Value"}, {"n": "Slovenia", "pe": 10.4, "cvs": 0.143, "t": "Fair Value"}, {"n": "Myanmar", "pe": 10.4, "cvs": 0.143, "t": "Fair Value"}];
+const SD=[{"n": "Lebanon", "pe": 4.1, "mc": 18500, "t": "Deep Value", "m": "Standalone"}, {"n": "Russia", "pe": 4.2, "mc": 650487, "t": "Deep Value", "m": "Standalone"}, {"n": "Kazakhstan", "pe": 4.3, "mc": 60497, "t": "Deep Value", "m": "Frontier"}, {"n": "Uzbekistan", "pe": 5.26, "mc": 4500, "t": "Deep Value", "m": "Non-MSCI"}, {"n": "Kenya", "pe": 5.3, "mc": 15357, "t": "Deep Value", "m": "Frontier"}, {"n": "Nigeria", "pe": 5.5, "mc": 57818, "t": "Deep Value", "m": "Standalone"}, {"n": "Zambia", "pe": 5.8, "mc": 7689, "t": "Deep Value", "m": "Non-MSCI"}, {"n": "Pakistan", "pe": 6.0, "mc": 48130, "t": "Deep Value", "m": "Frontier"}, {"n": "Ghana", "pe": 6.2, "mc": 7634, "t": "Deep Value", "m": "Non-MSCI"}, {"n": "Iraq", "pe": 6.5, "mc": 12500, "t": "Deep Value", "m": "Non-MSCI"}, {"n": "Namibia", "pe": 6.6, "mc": 4200, "t": "Deep Value", "m": "Non-MSCI"}, {"n": "Tanzania", "pe": 7.4, "mc": 7084, "t": "Deep Value", "m": "Non-MSCI"}, {"n": "Sri Lanka", "pe": 7.5, "mc": 19997, "t": "Value", "m": "Frontier"}, {"n": "Colombia", "pe": 7.71, "mc": 83060, "t": "Value", "m": "Emerging"}, {"n": "Egypt", "pe": 7.8, "mc": 44339, "t": "Value", "m": "Standalone"}, {"n": "Bangladesh", "pe": 8.1, "mc": 27058, "t": "Value", "m": "Frontier"}, {"n": "Palestine", "pe": 8.2, "mc": 3842, "t": "Value", "m": "Standalone"}, {"n": "Tunisia", "pe": 8.4, "mc": 8534, "t": "Value", "m": "Frontier"}, {"n": "Laos", "pe": 8.5, "mc": 1000, "t": "Value", "m": "Non-MSCI"}, {"n": "Jordan", "pe": 8.8, "mc": 25223, "t": "Value", "m": "Frontier"}, {"n": "Rwanda", "pe": 9.1, "mc": 2714, "t": "Value", "m": "Non-MSCI"}, {"n": "Romania", "pe": 9.2, "mc": 48359, "t": "Value", "m": "Frontier"}, {"n": "Serbia", "pe": 9.2, "mc": 4500, "t": "Value", "m": "Frontier"}, {"n": "Bahrain", "pe": 9.5, "mc": 19313, "t": "Value", "m": "Frontier"}, {"n": "Mongolia", "pe": 9.5, "mc": 1980, "t": "Value", "m": "Non-MSCI"}, {"n": "Vietnam", "pe": 9.65, "mc": 214233, "t": "Value", "m": "Frontier"}, {"n": "China", "pe": 10.17, "mc": 11874779, "t": "Fair Value", "m": "Emerging"}, {"n": "Botswana", "pe": 10.2, "mc": 3800, "t": "Fair Value", "m": "Frontier"}, {"n": "Slovenia", "pe": 10.4, "mc": 13080, "t": "Fair Value", "m": "Frontier"}, {"n": "Myanmar", "pe": 10.4, "mc": 500, "t": "Fair Value", "m": "Non-MSCI"}, {"n": "Greece", "pe": 10.5, "mc": 105920, "t": "Fair Value", "m": "Emerging"}, {"n": "Bulgaria", "pe": 10.5, "mc": 8395, "t": "Fair Value", "m": "Frontier"}, {"n": "Malta", "pe": 10.5, "mc": 7200, "t": "Fair Value", "m": "Non-MSCI"}, {"n": "Oman", "pe": 10.8, "mc": 23842, "t": "Fair Value", "m": "Frontier"}, {"n": "Bolivia", "pe": 10.9, "mc": 7100, "t": "Fair Value", "m": "Non-MSCI"}, {"n": "Turkey", "pe": 11.2, "mc": 338454, "t": "Fair Value", "m": "Emerging"}, {"n": "Mauritius", "pe": 11.2, "mc": 9483, "t": "Fair Value", "m": "Frontier"}, {"n": "Panama", "pe": 11.2, "mc": 18541, "t": "Fair Value", "m": "Standalone"}, {"n": "Zimbabwe", "pe": 11.2, "mc": 2734, "t": "Fair Value", "m": "Non-MSCI"}, {"n": "Ivory Coast", "pe": 11.4, "mc": 17300, "t": "Fair Value", "m": "Non-MSCI"}, {"n": "Hungary", "pe": 11.5, "mc": 44360, "t": "Fair Value", "m": "Emerging"}, {"n": "Croatia", "pe": 11.5, "mc": 29613, "t": "Fair Value", "m": "Frontier"}, {"n": "Poland", "pe": 11.8, "mc": 218195, "t": "Fair Value", "m": "Emerging"}, {"n": "Latvia", "pe": 12.0, "mc": 1800, "t": "Fair Value", "m": "Frontier"}, {"n": "Brazil", "pe": 12.32, "mc": 691196, "t": "Fair Value", "m": "Emerging"}, {"n": "Czech Republic", "pe": 12.4, "mc": 37583, "t": "Fair Value", "m": "Emerging"}, {"n": "Qatar", "pe": 12.5, "mc": 170523, "t": "Fair Value", "m": "Emerging"}, {"n": "Argentina", "pe": 12.5, "mc": 92000, "t": "Fair Value", "m": "Standalone"}, {"n": "Lithuania", "pe": 12.8, "mc": 6500, "t": "Fair Value", "m": "Frontier"}, {"n": "Trinidad and Tobago", "pe": 13.2, "mc": 9600, "t": "Expensive", "m": "Non-MSCI"}, {"n": "South Africa", "pe": 13.5, "mc": 1048967, "t": "Expensive", "m": "Emerging"}, {"n": "Estonia", "pe": 13.5, "mc": 4200, "t": "Expensive", "m": "Frontier"}, {"n": "Jamaica", "pe": 13.5, "mc": 11486, "t": "Expensive", "m": "Standalone"}, {"n": "Indonesia", "pe": 14.2, "mc": 758301, "t": "Expensive", "m": "Emerging"}, {"n": "Portugal", "pe": 14.5, "mc": 61933, "t": "Expensive", "m": "Developed"}, {"n": "UAE", "pe": 14.5, "mc": 1042473, "t": "Expensive", "m": "Emerging"}, {"n": "Kuwait", "pe": 14.8, "mc": 154951, "t": "Expensive", "m": "Emerging"}, {"n": "Bermuda", "pe": 14.8, "mc": 1901, "t": "Expensive", "m": "Standalone"}, {"n": "Chile", "pe": 14.91, "mc": 180876, "t": "Expensive", "m": "Emerging"}, {"n": "South Korea", "pe": 14.94, "mc": 1567708, "t": "Expensive", "m": "Emerging"}, {"n": "Philippines", "pe": 15.1, "mc": 253507, "t": "Expensive", "m": "Emerging"}, {"n": "Morocco", "pe": 15.1, "mc": 97860, "t": "Expensive", "m": "Frontier"}, {"n": "United Kingdom", "pe": 15.35, "mc": 4207625, "t": "Expensive", "m": "Developed"}, {"n": "Spain", "pe": 15.9, "mc": 805194, "t": "Expensive", "m": "Developed"}, {"n": "Thailand", "pe": 15.99, "mc": 450559, "t": "Expensive", "m": "Emerging"}, {"n": "Austria", "pe": 16.2, "mc": 127883, "t": "Expensive", "m": "Developed"}, {"n": "Italy", "pe": 16.5, "mc": 885000, "t": "Expensive", "m": "Developed"}, {"n": "Israel", "pe": 16.5, "mc": 274000, "t": "Expensive", "m": "Developed"}, {"n": "Malaysia", "pe": 16.5, "mc": 419253, "t": "Expensive", "m": "Emerging"}, {"n": "Saudi Arabia", "pe": 16.8, "mc": 2544976, "t": "Expensive", "m": "Emerging"}, {"n": "Mexico", "pe": 17.46, "mc": 467015, "t": "Expensive", "m": "Emerging"}, {"n": "Norway", "pe": 17.5, "mc": 415000, "t": "Expensive", "m": "Developed"}, {"n": "Hong Kong", "pe": 17.69, "mc": 5008913, "t": "Expensive", "m": "Developed"}, {"n": "Singapore", "pe": 17.84, "mc": 674445, "t": "Expensive", "m": "Developed"}, {"n": "Belgium", "pe": 17.9, "mc": 185000, "t": "Expensive", "m": "Developed"}, {"n": "Iceland", "pe": 18.2, "mc": 27816, "t": "Expensive", "m": "Frontier"}, {"n": "France", "pe": 18.5, "mc": 2365950, "t": "Expensive", "m": "Developed"}, {"n": "Ireland", "pe": 18.5, "mc": 105000, "t": "Expensive", "m": "Developed"}, {"n": "Germany", "pe": 18.58, "mc": 2669723, "t": "Expensive", "m": "Developed"}, {"n": "Peru", "pe": 18.63, "mc": 82953, "t": "Expensive", "m": "Emerging"}, {"n": "Finland", "pe": 19.8, "mc": 20344, "t": "Expensive", "m": "Developed"}, {"n": "Netherlands", "pe": 20.1, "mc": 1215000, "t": "Expensive", "m": "Developed"}, {"n": "Canada", "pe": 20.2, "mc": 3612017, "t": "Expensive", "m": "Developed"}, {"n": "Japan", "pe": 20.87, "mc": 6673367, "t": "Expensive", "m": "Developed"}, {"n": "Taiwan", "pe": 21.0, "mc": 2310744, "t": "Expensive", "m": "Emerging"}, {"n": "Sweden", "pe": 21.44, "mc": 289877, "t": "Expensive", "m": "Developed"}, {"n": "Switzerland", "pe": 22.1, "mc": 2232795, "t": "Expensive", "m": "Developed"}, {"n": "Denmark", "pe": 23.2, "mc": 151349, "t": "Very Expensive", "m": "Developed"}, {"n": "Nepal", "pe": 23.5, "mc": 13200, "t": "Very Expensive", "m": "Non-MSCI"}, {"n": "Australia", "pe": 24.01, "mc": 1778958, "t": "Very Expensive", "m": "Developed"}, {"n": "India", "pe": 24.5, "mc": 5592767, "t": "Very Expensive", "m": "Emerging"}, {"n": "United States", "pe": 27.78, "mc": 58733079, "t": "Very Expensive", "m": "Developed"}, {"n": "New Zealand", "pe": 36.35, "mc": 93903, "t": "Very Expensive", "m": "Developed"}, {"n": "Malawi", "pe": 42.6, "mc": 3800, "t": "Very Expensive", "m": "Non-MSCI"}];
+const TC={deep_value:'#10b981',value:'#34d399',fair_value:'#f59e0b',expensive:'#f97316',very_expensive:'#ef4444'};
+function tkey(t){return t.toLowerCase().replace(/ /g,'_')}
+
+// Bar Chart — horizontal layout
+const bc=document.getElementById('barChart').getContext('2d');
+function drawBar(){
+  const dpr=window.devicePixelRatio||1;
+  const rowH=24,labelW=140,valW=52,padT=8,padR=16;
+  const cssW=bc.canvas.parentElement.clientWidth-56;
+  const cssH=BD.length*rowH+padT*2;
+  bc.canvas.style.width=cssW+'px';bc.canvas.style.height=cssH+'px';
+  bc.canvas.width=cssW*dpr;bc.canvas.height=cssH*dpr;
+  bc.setTransform(dpr,0,0,dpr,0,0);
+  bc.clearRect(0,0,cssW,cssH);
+  const barArea=cssW-labelW-valW-padR;
+  const mx=Math.max(...BD.map(d=>d.cvs));
+  BD.forEach((d,i)=>{
+    const y=padT+i*rowH;
+    const barW=(d.cvs/mx)*barArea;
+    const c=TC[tkey(d.t)]||'#3b82f6';
+    // row bg (alternating)
+    if(i%2===0){bc.fillStyle='rgba(255,255,255,0.015)';bc.fillRect(0,y,cssW,rowH);}
+    // country name
+    bc.fillStyle='#9ca3af';bc.font='500 11px Inter';bc.textAlign='right';
+    bc.fillText(d.n,labelW-10,y+rowH/2+4);
+    // P/E in smaller dim text
+    bc.fillStyle='#374151';bc.font='10px Menlo,Monaco,Consolas,monospace';
+    bc.fillText(d.pe.toFixed(1)+'x',labelW-10,y+rowH/2-5);
+    // bar track
+    bc.fillStyle='rgba(255,255,255,0.04)';
+    bc.fillRect(labelW,y+5,barArea,rowH-10);
+    // bar fill
+    bc.fillStyle=c+'bb';bc.fillRect(labelW,y+5,barW,rowH-10);
+    // CVS value
+    bc.fillStyle=c;bc.font='600 10px Menlo,Monaco,Consolas,monospace';bc.textAlign='left';
+    bc.fillText('+'+d.cvs.toFixed(2),labelW+barW+6,y+rowH/2+4);
+  });
+}
+drawBar();window.addEventListener('resize',drawBar);
+
+// Scatter
+const sc=document.getElementById('scatterChart').getContext('2d');
+let scPts=[],scHL=null;
+function drawScatter(hlName){
+  const dpr=window.devicePixelRatio||1;
+  const cssW=sc.canvas.parentElement.clientWidth-56,cssH=400;
+  sc.canvas.style.width=cssW+'px';sc.canvas.style.height=cssH+'px';
+  sc.canvas.width=cssW*dpr;sc.canvas.height=cssH*dpr;
+  sc.setTransform(dpr,0,0,dpr,0,0);
+  const p={t:16,r:20,b:38,l:52},cW=cssW-p.l-p.r,cH=cssH-p.t-p.b;
+  sc.clearRect(0,0,cssW,cssH);
+  const mxPE=40;
+  const mcs=SD.filter(d=>d.mc>0).map(d=>Math.log10(d.mc));
+  const mnMC=Math.min(...mcs),mxMC=Math.max(...mcs);
+  scPts=[];
+  // grid
+  sc.fillStyle='#374151';sc.font='10px Menlo,Monaco,Consolas,monospace';
+  for(let pe=0;pe<=mxPE;pe+=5){
+    const x=p.l+pe/mxPE*cW;
+    sc.textAlign='center';sc.fillText(pe+'x',x,cssH-p.b+14);
+    sc.strokeStyle='rgba(255,255,255,0.04)';sc.beginPath();sc.moveTo(x,p.t);sc.lineTo(x,cssH-p.b);sc.stroke();
+  }
+  sc.fillStyle='#374151';sc.font='10px Inter';
+  sc.textAlign='center';sc.fillText('P/E Ratio',cssW/2,cssH-4);
+  sc.save();sc.translate(10,cssH/2);sc.rotate(-Math.PI/2);sc.fillText('Market Cap (log)',0,0);sc.restore();
+  // draw non-highlighted first, highlighted on top
+  const sorted=[...SD].sort((a,b)=>(a.n===hlName?1:-1));
+  sorted.forEach(d=>{
+    const pe=Math.min(d.pe,mxPE),mc=Math.log10(d.mc+1);
+    const x=p.l+pe/mxPE*cW,y=p.t+cH-((mc-mnMC)/(mxMC-mnMC))*cH;
+    const r=d.m==='Developed'?5:d.m==='Emerging'?4:3;
+    const isHL=d.n===hlName;
+    const col=TC[tkey(d.t)]||'#475569';
+    scPts.push({x,y,r,d});
+    sc.beginPath();sc.arc(x,y,isHL?r+3:r,0,Math.PI*2);
+    sc.fillStyle=isHL?col:col+'88';sc.fill();
+    sc.strokeStyle=isHL?col+'cc':'transparent';sc.lineWidth=1.5;sc.stroke();
+    // only label hovered point — tooltip handles everything else
+    if(isHL){
+      sc.fillStyle='#e2e8f0';sc.font='600 10px Inter';sc.textAlign='left';
+      sc.fillText(d.n,x+r+5,y+4);
+    }
+  });
+}
+drawScatter();
+window.addEventListener('resize',()=>drawScatter(scHL));
+
+// Scatter tooltip
+const scTip=document.createElement('div');
+scTip.style.cssText='position:fixed;display:none;background:#0d1117;border:1px solid rgba(255,255,255,0.12);border-radius:5px;padding:10px 14px;font-size:.75rem;pointer-events:none;z-index:200;line-height:1.7;min-width:160px;font-family:Inter,sans-serif;color:#cdd5e0';
+document.body.appendChild(scTip);
+sc.canvas.addEventListener('mousemove',e=>{
+  const rect=sc.canvas.getBoundingClientRect();
+  const mx=(e.clientX-rect.left)*(sc.canvas.width/rect.width);
+  const my=(e.clientY-rect.top)*(sc.canvas.height/rect.height);
+  let hit=null,best=Infinity;
+  scPts.forEach(pt=>{
+    const dist=Math.hypot(pt.x-mx,pt.y-my);
+    if(dist<Math.max(pt.r+10,14)&&dist<best){best=dist;hit=pt;}
+  });
+  if(hit){
+    if(scHL!==hit.d.n){scHL=hit.d.n;drawScatter(scHL);}
+    const d=hit.d;
+    const mc=d.mc>=1e6?`$${(d.mc/1e6).toFixed(2)}T`:d.mc>=1000?`$${(d.mc/1000).toFixed(0)}B`:`$${d.mc}M`;
+    scTip.innerHTML=`<div style="font-weight:600;margin-bottom:5px;font-size:.82rem;color:#e2e8f0">${d.n}</div>`+
+      `<div>P/E: <span style="font-family:'JetBrains Mono',monospace;color:#60a5fa">${d.pe.toFixed(1)}x</span></div>`+
+      `<div>Mkt Cap: <span style="font-family:'JetBrains Mono',monospace">${mc}</span></div>`+
+      `<div>Tier: <span style="font-family:'JetBrains Mono',monospace">${d.t}</span></div>`+
+      `<div>MSCI: <span style="font-family:'JetBrains Mono',monospace">${d.m}</span></div>`;
+    scTip.style.display='block';
+    const tipW=scTip.offsetWidth+4;
+    scTip.style.left=(e.clientX+18+tipW>window.innerWidth?e.clientX-tipW-8:e.clientX+18)+'px';
+    scTip.style.top=(e.clientY-10)+'px';
+    sc.canvas.style.cursor='crosshair';
+  } else {
+    if(scHL){scHL=null;drawScatter();}
+    scTip.style.display='none';
+    sc.canvas.style.cursor='default';
+  }
+});
+sc.canvas.addEventListener('mouseleave',()=>{
+  if(scHL){scHL=null;drawScatter();}
+  scTip.style.display='none';
+});
+
+// Sort
+let sc2=0,sa=true;
+let sc3=-1,sb=false;
+function sortBest(c,t){
+  const tb=document.querySelector('#bestTable tbody');
+  const rw=[...tb.querySelectorAll('tr')];
+  if(sc3===c)sb=!sb;else{sc3=c;sb=c<=1;}
+  rw.sort((a,b)=>{
+    let av=a.cells[c].textContent.trim(),bv=b.cells[c].textContent.trim();
+    if(t==='n'){av=parseFloat(av.replace(/[^0-9.\-+]/g,''))||Infinity;bv=parseFloat(bv.replace(/[^0-9.\-+]/g,''))||Infinity;}
+    return av<bv?(sb?-1:1):av>bv?(sb?1:-1):0;
+  });
+  rw.forEach(r=>tb.appendChild(r));
+}
+function ss(c,t){
+  const tb=document.querySelector('#peTable tbody');
+  const rw=[...tb.querySelectorAll('tr')];
+  if(sc2===c)sa=!sa;else{sc2=c;sa=c<=1;}
+  rw.sort((a,b)=>{
+    let av=a.cells[c].textContent.trim(),bv=b.cells[c].textContent.trim();
+    if(t==='n'){av=parseFloat(av.replace(/[^0-9.\-+]/g,''))||Infinity;bv=parseFloat(bv.replace(/[^0-9.\-+]/g,''))||Infinity;}
+    return av<bv?(sa?-1:1):av>bv?(sa?1:-1):0;
+  });
+  rw.forEach(r=>tb.appendChild(r));
+}
+// Filter P/E
+function ft(){
+  const t=document.getElementById('fTier').value,m=document.getElementById('fMsci').value;
+  const r=document.getElementById('fRegion').value,s=document.getElementById('fSearch').value.toLowerCase();
+  const ac=document.getElementById('fAccess').value;
+  document.querySelectorAll('#peTable tbody tr').forEach(row=>{
+    row.style.display=(!t||row.dataset.tier===t)&&(!m||row.dataset.msci===m)&&(!r||row.dataset.region===r)&&(!ac||row.dataset.access===ac)&&(!s||row.dataset.name.includes(s))?'':'none';
+  });
+}
+// Filter Econ
+function fe(){
+  const t=document.getElementById('fEcon').value,s=document.getElementById('fEconS').value.toLowerCase();
+  document.querySelectorAll('#econTable tbody tr').forEach(row=>{
+    row.style.display=(!t||row.dataset.tier===t)&&(!s||row.dataset.name.includes(s))?'':'none';
+  });
+}
+// Color CVS cells
+document.querySelectorAll('.cvs-cell').forEach(c=>{
+  const v=parseFloat(c.dataset.cvs);
+  c.style.color=v>1?'#10b981':v>0.3?'#34d399':v>-0.3?'#f59e0b':v>-1?'#f97316':'#ef4444';
+});
+
+// Custom column header tooltips
+// Native title attribute is unreliable on sticky table headers in Chrome/Safari.
+// We move tooltip text into data-tip, then render a custom div on hover.
+(function(){
+  const box=document.createElement('div');
+  box.style.cssText='position:fixed;display:none;background:#0d1117;border:1px solid rgba(255,255,255,0.15);border-radius:5px;padding:10px 14px;font-size:.73rem;font-weight:400;text-transform:none;letter-spacing:0;line-height:1.6;max-width:340px;white-space:normal;color:#cdd5e0;box-shadow:0 4px 16px rgba(0,0,0,0.5);pointer-events:none;z-index:9999;font-family:Inter,sans-serif';
+  document.body.appendChild(box);
+
+  function pos(e){
+    const w=box.offsetWidth,h=box.offsetHeight,vw=window.innerWidth,vh=window.innerHeight;
+    let x=e.clientX+16,y=e.clientY+16;
+    if(x+w>vw-8) x=e.clientX-w-10;
+    if(y+h>vh-8) y=e.clientY-h-10;
+    box.style.left=x+'px';box.style.top=y+'px';
+  }
+
+  document.querySelectorAll('th[title]').forEach(th=>{
+    const text=th.getAttribute('title');
+    th.removeAttribute('title');      // prevent native browser tooltip
+    th.setAttribute('data-tip',text);
+    th.addEventListener('mouseenter',e=>{box.textContent=text;box.style.display='block';pos(e);});
+    th.addEventListener('mousemove',pos);
+    th.addEventListener('mouseleave',()=>box.style.display='none');
+  });
+})();
+</script>
+</body>
+</html>
